@@ -108,6 +108,114 @@ export const de = {
     closeLead:
       'Generieren, prüfen, dekodieren – oder eine Runde spielen, die nur aus einer UUID besteht.',
   },
+  toolsPage: {
+    title: 'UUID-Tools – Generator, Decoder, Konverter | uuidea',
+    description:
+      'UUIDs v1, v4, v5, v6, v7, Nil und Max erzeugen (bis 1000 auf einmal), prüfen, dekodieren und umwandeln. Dazu ULID und Nano ID. Alles lokal im Browser.',
+    eyebrow: 'Tools',
+    h1: 'Der UUID-Werkzeugkasten',
+    lead: 'Erzeugen, prüfen, dekodieren, umwandeln. Alles passiert in deinem Browser – nichts wird gesendet, nichts gespeichert.',
+    nav: {
+      generator: 'Generator',
+      decoder: 'Decoder',
+      converter: 'Konverter',
+      alt: 'ULID & Nano ID',
+    },
+    gen: {
+      h2: 'Generator',
+      lead: 'Wähle eine Version, eine Menge und ein Format.',
+      version: 'Version',
+      versions: {
+        v4: 'Zufall',
+        v7: 'Unix-Zeit',
+        v1: 'Zeit + Knoten',
+        v6: 'Zeit, sortierbar',
+        v5: 'Name (SHA-1)',
+        nil: 'Nil',
+        max: 'Max',
+      },
+      count: 'Anzahl',
+      countHint: '1 bis 1000',
+      format: 'Format',
+      encodings: { hex: 'Hex', base64url: 'Base64URL', base58: 'Base58' },
+      upper: 'Großbuchstaben',
+      noHyphens: 'Ohne Bindestriche',
+      braces: 'Geschweifte Klammern',
+      namespace: 'Namespace',
+      customNs: 'Eigene Namespace-UUID',
+      names: 'Namen (einer pro Zeile)',
+      namesPlaceholder: 'uuidea.de\nwww.example.com',
+      generate: 'Neu erzeugen',
+      copyAll: 'Alle kopieren',
+      txt: '.txt',
+      csv: '.csv',
+      rowHint: 'Antippen kopiert eine einzelne UUID.',
+      fixedHint: 'Nil und Max sind Konstanten – es gibt genau eine.',
+      nsInvalid: 'Das ist keine gültige Namespace-UUID.',
+      empty: 'Gib mindestens einen Namen ein.',
+      generated: (n: number) => `${n} ${n === 1 ? 'UUID' : 'UUIDs'} erzeugt`,
+    },
+    dec: {
+      h2: 'Validator & Decoder',
+      lead: 'Füge eine UUID in beliebiger Schreibweise ein – auch Base64URL, Base58 oder mit urn:uuid:.',
+      label: 'UUID zum Prüfen',
+      placeholder: 'z. B. 017f22e2-79b0-7cc3-98c4-dc0c0c07398f',
+      useSession: 'Session-UUID einfügen',
+      useV7: 'Beispiel v7',
+      empty: 'Das Ergebnis erscheint hier, sobald du etwas einfügst.',
+      valid: 'Gültig',
+      invalid: 'Ungültig',
+      input: 'Eingabeformat',
+      formats: {
+        standard: 'Standard (8-4-4-4-12)',
+        compact: 'Ohne Bindestriche',
+        braces: 'Geschweifte Klammern',
+        urn: 'URN',
+        base64url: 'Base64URL',
+        base58: 'Base58',
+      },
+      version: 'Version',
+      variant: 'Variante',
+      time: 'Eingebettete Zeit',
+      timeLocal: 'Lokal',
+      timeUtc: 'UTC',
+      clockSeq: 'Clock-Sequenz',
+      node: 'Knoten',
+      nil: 'Die Nil-UUID: alle 128 Bit sind 0. Ein Platzhalter für „keine UUID“.',
+      max: 'Die Max-UUID: alle 128 Bit sind 1. Das Gegenstück zur Nil-UUID.',
+      ambiguous: (fmt: string) =>
+        `Diese Eingabe ist auch als ${fmt} gültig. Gemeint war vielleicht diese UUID:`,
+      useAlt: 'Diese Lesart verwenden',
+      hint: 'Tipp: Version und Variante stehen an festen Stellen – im 13. Zeichen und im 17. Zeichen.',
+    },
+    conv: {
+      h2: 'Konverter',
+      lead: 'Eine UUID, alle Schreibweisen. Erkennt auch ULIDs.',
+      label: 'UUID oder ULID',
+      ulid: 'Als ULID (Crockford Base32)',
+      fromUlid: 'Aus einer ULID gelesen',
+    },
+    alt: {
+      h2: 'ULID & Nano ID im Vergleich',
+      lead: 'Drei Wege zu einer eindeutigen ID. Jede hat ihre Stärken.',
+      regenerate: 'Neu erzeugen',
+      cols: {
+        name: 'Format',
+        example: 'Beispiel',
+        length: 'Länge',
+        bits: 'Zufall',
+        sortable: 'Sortierbar',
+      },
+      yes: 'ja',
+      no: 'nein',
+      rows: {
+        v4: 'Standard, überall unterstützt. Reiner Zufall.',
+        v7: 'Moderner Standard. Zeit vorne – perfekt für Datenbank-Indizes.',
+        ulid: 'Wie v7, aber kürzer und ohne Bindestriche (Crockford Base32).',
+        nanoid: 'Kurz und URL-sicher. Kein Standard, keine Zeit – nur Zufall.',
+      },
+    },
+  },
   footer: {
     tagline: 'Eindeutig. Seit deinem letzten Refresh.',
     sessionLabel: 'Deine Session',
@@ -130,9 +238,11 @@ export const de = {
 
 type Widen<T> = T extends string
   ? string
-  : T extends readonly (infer U)[]
-    ? readonly Widen<U>[]
-    : { readonly [K in keyof T]: Widen<T[K]> };
+  : T extends (...args: infer A) => infer R
+    ? (...args: A) => Widen<R>
+    : T extends readonly (infer U)[]
+      ? readonly Widen<U>[]
+      : { readonly [K in keyof T]: Widen<T[K]> };
 
 /** Form, die jede weitere Sprache erfüllen muss. */
 export type Dict = Widen<typeof de>;

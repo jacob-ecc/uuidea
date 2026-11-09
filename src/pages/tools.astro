@@ -1,11 +1,85 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import PageHeader from '@/components/PageHeader.astro';
+import Generator from '@/islands/tools/Generator';
+import Decoder from '@/islands/tools/Decoder';
+import Converter from '@/islands/tools/Converter';
+import AltIds from '@/islands/tools/AltIds';
+import { t } from '@/i18n';
+import '@/styles/tools.css';
+
+const p = t.toolsPage;
+const sections = [
+  { id: 'generator', label: p.nav.generator },
+  { id: 'decoder', label: p.nav.decoder },
+  { id: 'konverter', label: p.nav.converter },
+  { id: 'vergleich', label: p.nav.alt },
+] as const;
 ---
 
-<BaseLayout
-  title="UUID-Tools – uuidea"
-  description="UUID-Generator, Validator, Decoder und Konverter. Lokal im Browser."
->
-  <PageHeader eyebrow="Tools" title="Der UUID-Werkzeugkasten" lead="Kommt in Meilenstein 2." />
+<BaseLayout title={p.title} description={p.description} ogImage="/og/tools.png">
+  <header class="wrap enter-page tools-hero">
+    <p class="eyebrow enter">{p.eyebrow}</p>
+    <h1 class="t-h1 enter mt-3">{p.h1}</h1>
+    <p class="t-lead enter prose-w mt-4">{p.lead}</p>
+  </header>
+
+  <nav class="tools-nav" aria-label="Werkzeuge">
+    <ul class="wrap">
+      {sections.map((s) => (
+        <li>
+          <a href={`#${s.id}`}>{s.label}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  <div class="wrap tools-stack">
+    <section id="generator" class="tool-section" aria-labelledby="generator-h">
+      <h2 id="generator-h" class="t-h2">
+        {p.gen.h2}
+      </h2>
+      <p class="t-lead mt-2">{p.gen.lead}</p>
+      <div class="mt-6">
+        <Generator client:only="preact">
+          <div
+            slot="fallback"
+            class="tool-panel tool-skeleton gen-skeleton"
+            aria-hidden="true"
+          ></div>
+        </Generator>
+      </div>
+    </section>
+
+    <section id="decoder" class="tool-section" aria-labelledby="decoder-h">
+      <h2 id="decoder-h" class="t-h2">
+        {p.dec.h2}
+      </h2>
+      <p class="t-lead mt-2">{p.dec.lead}</p>
+      <div class="mt-6">
+        <Decoder client:load />
+      </div>
+    </section>
+
+    <section id="konverter" class="tool-section" aria-labelledby="konverter-h">
+      <h2 id="konverter-h" class="t-h2">
+        {p.conv.h2}
+      </h2>
+      <p class="t-lead mt-2">{p.conv.lead}</p>
+      <div class="mt-6">
+        <Converter client:load />
+      </div>
+    </section>
+
+    <section id="vergleich" class="tool-section" aria-labelledby="vergleich-h">
+      <h2 id="vergleich-h" class="t-h2">
+        {p.alt.h2}
+      </h2>
+      <p class="t-lead mt-2">{p.alt.lead}</p>
+      <div class="mt-6">
+        <AltIds client:only="preact">
+          <div slot="fallback" class="tool-skeleton alt-skeleton" aria-hidden="true"></div>
+        </AltIds>
+      </div>
+    </section>
+  </div>
 </BaseLayout>

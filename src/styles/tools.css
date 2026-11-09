@@ -1,0 +1,489 @@
+/* Styles der Tool-Seite (App-UI). Folgt DESIGN.md; Islands nutzen diese Klassen. */
+
+.tools-hero {
+  padding-top: 48px;
+  padding-bottom: 24px;
+}
+@media (min-width: 768px) {
+  .tools-hero {
+    padding-top: 80px;
+    padding-bottom: 32px;
+  }
+}
+
+/* In-Page-Navigation: klebt unter dem Header, scrollt mobil horizontal in sich */
+.tools-nav {
+  position: sticky;
+  top: calc(var(--nav-h) + env(safe-area-inset-top));
+  z-index: 30;
+  background: color-mix(in oklab, var(--color-canvas) 88%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-hairline);
+}
+.tools-nav ul {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-block: 8px;
+}
+.tools-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 9999px;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-ink-muted);
+  text-decoration: none;
+  transition:
+    background-color 200ms var(--ease-out),
+    color 200ms var(--ease-out);
+}
+.tools-nav a:hover,
+.tools-nav a.is-active {
+  background: var(--color-surface-1);
+  color: var(--color-ink);
+}
+.tools-nav li:first-child a {
+  margin-left: -14px;
+}
+
+.tools-stack {
+  display: grid;
+  gap: 72px;
+  padding-top: 48px;
+}
+@media (min-width: 768px) {
+  .tools-stack {
+    gap: 96px;
+    padding-top: 64px;
+  }
+}
+.tool-section {
+  scroll-margin-top: calc(var(--nav-h) + 72px);
+}
+.tool-section > .t-lead {
+  max-width: 62ch;
+}
+
+/* Panel: Steuerung + Ausgabe, ab 1024px nebeneinander (5/7) */
+.tool-panel {
+  display: grid;
+  gap: 0;
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+@media (min-width: 1024px) {
+  .tool-panel {
+    grid-template-columns: 5fr 7fr;
+  }
+}
+.tool-controls {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+  padding: 20px;
+  border-bottom: 1px solid var(--color-hairline);
+}
+.tool-output {
+  min-width: 0;
+  padding: 20px;
+  background: var(--color-canvas);
+}
+@media (min-width: 1024px) {
+  .tool-controls {
+    padding: 28px;
+    border-bottom: 0;
+    border-right: 1px solid var(--color-hairline);
+  }
+  .tool-output {
+    padding: 28px;
+  }
+}
+
+.ctl {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.ctl-grid {
+  display: grid;
+  gap: 16px;
+}
+.ctl-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+.ctl-hint {
+  font-size: 14px;
+  color: var(--color-ink-muted);
+}
+.field-area {
+  min-height: 96px;
+  padding-block: 12px;
+  font-family: var(--font-mono);
+  resize: vertical;
+}
+select.field {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--color-ink-muted) 50%),
+    linear-gradient(135deg, var(--color-ink-muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) 50%,
+    calc(100% - 15px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 40px;
+}
+
+/* Radiogruppe als Segment-Control */
+.choice {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.choice .segmented {
+  flex-wrap: wrap;
+  border-radius: 22px;
+}
+.choice .segmented > label {
+  flex: 1 0 auto;
+  cursor: pointer;
+  font-family: var(--font-mono);
+}
+.choice .segmented > label:has(input:focus-visible) {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Anzahl */
+.count-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.count-input {
+  width: 104px;
+  flex: none;
+}
+.chip {
+  min-width: 56px;
+  min-height: 48px;
+  padding: 0 14px;
+  border-radius: 9999px;
+  border: 1px solid var(--color-hairline-strong);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--color-ink-muted);
+  transition:
+    background-color 200ms var(--ease-out),
+    color 200ms var(--ease-out),
+    border-color 200ms var(--ease-out);
+}
+.chip:hover:not(:disabled) {
+  color: var(--color-ink);
+  border-color: #48536b;
+}
+.chip.is-on {
+  background: var(--color-surface-3);
+  color: var(--color-ink);
+}
+.chip:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Schalter */
+.toggles {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+}
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--color-ink);
+}
+.toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.toggle-track {
+  position: relative;
+  width: 40px;
+  height: 24px;
+  flex: none;
+  border-radius: 9999px;
+  background: var(--color-surface-3);
+  border: 1px solid var(--color-hairline-strong);
+  transition: background-color 200ms var(--ease-out);
+}
+.toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: var(--color-ink-muted);
+  transition:
+    transform 200ms var(--ease-out),
+    background-color 200ms var(--ease-out);
+}
+.toggle input:checked + .toggle-track {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.toggle input:checked + .toggle-track .toggle-thumb {
+  transform: translateX(16px);
+  background: var(--color-on-accent);
+}
+.toggle input:focus-visible + .toggle-track {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+.toggle.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Ausgabe Generator */
+.out-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.out-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.out-list {
+  max-height: 420px;
+  overflow: auto;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  overscroll-behavior: contain;
+}
+.out-list li + li {
+  border-top: 1px solid var(--color-hairline);
+}
+.out-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 14px;
+  text-align: left;
+  /* 36 Zeichen à 0,6em passen mobil exakt in eine Zeile */
+  font-size: min(15px, calc((100vw - 2 * var(--gut) - 64px) / 21.6));
+  transition: background-color 160ms var(--ease-out);
+}
+.out-row:hover {
+  background: var(--color-surface-1);
+}
+.out-row:active {
+  background: var(--color-surface-2);
+}
+.out-row:focus-visible {
+  outline-offset: -2px;
+}
+.out-row .uuid {
+  word-break: break-all;
+}
+.out-nr {
+  display: none;
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-ink-subtle);
+}
+
+/* Decoder */
+.result-uuid {
+  margin-top: 16px;
+  font-size: clamp(14px, 4vw, 20px);
+}
+.badge-bad {
+  color: var(--color-danger);
+  border-color: color-mix(in oklab, var(--color-danger) 35%, transparent);
+  background: color-mix(in oklab, var(--color-danger) 10%, transparent);
+}
+.notice {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in oklab, var(--color-warning) 35%, transparent);
+  background: color-mix(in oklab, var(--color-warning) 7%, transparent);
+  font-size: 15px;
+  color: var(--color-ink);
+}
+.kv {
+  margin-top: 20px;
+  border-top: 1px solid var(--color-hairline);
+}
+.kv > div {
+  display: grid;
+  gap: 4px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-hairline);
+}
+@media (min-width: 640px) {
+  .kv > div {
+    grid-template-columns: 160px 1fr;
+    gap: 16px;
+  }
+}
+.kv dt {
+  font-size: 14px;
+  color: var(--color-ink-muted);
+}
+.kv dd {
+  min-width: 0;
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+}
+.kv-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 14px;
+  color: var(--color-ink-muted);
+}
+
+/* Konverter */
+.conv-list {
+  display: grid;
+}
+.conv-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-hairline);
+}
+.conv-row:first-child {
+  padding-top: 0;
+}
+.conv-label {
+  font-size: 13px;
+  color: var(--color-ink-muted);
+}
+.conv-value {
+  margin-top: 2px;
+  color: var(--color-ink);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+/* ULID & Nano ID */
+.alt-grid {
+  display: grid;
+  gap: var(--gutter);
+}
+@media (min-width: 768px) {
+  .alt-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.alt-card {
+  padding: 20px;
+}
+.alt-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 6px 6px 6px 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  font-size: 14px;
+}
+.alt-value p {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.alt-meta {
+  display: flex;
+  gap: 24px;
+  margin-top: 14px;
+  font-size: 14px;
+}
+.alt-meta dt {
+  color: var(--color-ink-muted);
+}
+.alt-meta dd {
+  color: var(--color-ink);
+}
+
+/* Platzhalter bis zur Hydration (verhindert Layout-Sprünge) */
+.tool-skeleton {
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-hairline);
+}
+.gen-skeleton {
+  min-height: 900px;
+}
+@media (min-width: 1024px) {
+  .gen-skeleton {
+    min-height: 620px;
+  }
+}
+.alt-skeleton {
+  min-height: 860px;
+}
+@media (min-width: 768px) {
+  .alt-skeleton {
+    min-height: 470px;
+  }
+}
+
+@media (max-width: 639px) {
+  .tool-controls,
+  .tool-output {
+    padding: 14px;
+  }
+  .out-row {
+    padding: 8px 10px;
+  }
+}
+@media (min-width: 640px) {
+  .out-nr {
+    display: inline;
+  }
+  .out-row {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 639px) {
+  .out-head {
+    display: grid;
+  }
+  .out-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
