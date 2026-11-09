@@ -9,26 +9,34 @@ interface Props {
   description?: string;
   ogImage?: string;
   noindex?: boolean;
+  /** Showcase-Seite (Taste-Skill): Sektionen bringen den Header-Abstand selbst mit, Footer als Schluss-Screen */
+  showcase?: boolean;
 }
 const {
   title = t.meta.defaultTitle,
   description = t.meta.defaultDescription,
   ogImage = '/og/default.png',
   noindex = false,
+  showcase = false,
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname.replace(/\.html$/, ''), Astro.site);
 const ogUrl = new URL(ogImage, Astro.site);
 ---
 
 <!doctype html>
-<html lang="de">
+<html lang="de" data-type="software">
   <head>
     <meta charset="utf-8" />
+    <script is:inline>
+      document.documentElement.classList.add('m-enter');
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
+    <meta name="page-type" content="software" />
+    <meta name="site-kind" content="software" />
     <meta name="theme-color" content="#07080c" />
     <meta name="color-scheme" content="dark" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -49,15 +57,13 @@ const ogUrl = new URL(ogImage, Astro.site);
     <slot name="head" />
   </head>
   <body>
-    <a href="#main" class="skip-link">
-      {t.a11y.skip}
-    </a>
     <Header />
-    <main id="main" tabindex="-1">
+    <main id="main" tabindex="-1" class:list={[!showcase && 'pt-nav']}>
       <slot />
     </main>
-    <Footer />
-    <div class="grain" aria-hidden="true"></div>
+    <Footer closing={showcase}>
+      <slot name="close" />
+    </Footer>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <script>
@@ -68,24 +74,8 @@ const ogUrl = new URL(ogImage, Astro.site);
 </html>
 
 <style>
-  .skip-link {
-    position: fixed;
-    left: 12px;
-    top: 12px;
-    z-index: 100;
-    padding: 12px 16px;
-    border-radius: var(--radius-md);
-    background: var(--color-accent);
-    color: var(--color-on-accent);
-    font-weight: 500;
-    transform: translateY(-200%);
-    transition: transform 200ms var(--ease-out);
-  }
-  .skip-link:focus {
-    transform: none;
-  }
-  main:focus {
-    outline: none;
+  .pt-nav {
+    padding-top: calc(var(--nav-h) + env(safe-area-inset-top));
   }
   .toast {
     position: fixed;

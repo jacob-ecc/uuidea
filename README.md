@@ -31,3 +31,15 @@ Gestaltungsregeln: [DESIGN.md](DESIGN.md) · Plan & Meilensteine: [PLAN.md](PLAN
 Cloudflare Pages → _Connect to Git_ → Repo wählen.
 Framework-Preset **Astro**, Build-Command `npm run build`, Output `dist`,
 Umgebungsvariable `NODE_VERSION=24`. Weitere Variablen oder Secrets braucht das Projekt nicht.
+
+## Design-Prüfung (Taste Skill)
+
+Die Showcase-Seiten folgen dem Taste Skill im Hybrid-Modus (siehe [DESIGN.md §11](DESIGN.md)).
+Prüfen gegen den Build:
+
+```bash
+npm run build
+node ~/.claude/skills/design-taste-frontend/scripts/consistency.mjs dist/index.html --root dist \
+  --quick --widths 1440,390 --profile .taste-skill/chrome-check --page software \
+  --category "UUID-Tools und Spiele" --primary "UUID kopieren"
+```

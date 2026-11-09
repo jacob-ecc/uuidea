@@ -12,7 +12,7 @@ const { href, eyebrow, title, description, class: cls } = Astro.props;
 ---
 
 <a href={href} class:list={['tile card', cls]}>
-  <div class="tile-visual" aria-hidden="true">
+  <div class="tile-visual" aria-hidden="true" data-ui>
     <slot />
   </div>
   <div class="tile-body">
@@ -23,7 +23,7 @@ const { href, eyebrow, title, description, class: cls } = Astro.props;
         <Icon name="arrow" />
       </span>
     </h3>
-    <p class="mt-2 text-[15px] text-ink-subtle">{description}</p>
+    <p class="mt-2 text-[15px] text-ink-muted">{description}</p>
   </div>
 </a>
 
@@ -64,7 +64,7 @@ const { href, eyebrow, title, description, class: cls } = Astro.props;
     border-radius: var(--radius-lg);
   }
   .tile-visual {
-    height: 132px;
+    height: 168px;
     border-bottom: 1px solid var(--color-hairline);
     display: grid;
     place-items: center;

@@ -6,8 +6,11 @@ import { navItems, isActive } from './nav';
 const path = Astro.url.pathname;
 ---
 
-<header class="site-header">
-  <div class="container-page flex h-full items-center justify-between gap-4">
+<header class="nav site-header">
+  <div class="wrap relative flex h-full items-center justify-between gap-4">
+    <a href="#main" class="skip-link">
+      {t.a11y.skip}
+    </a>
     <a href="/" class="wordmark" aria-label="uuidea – Startseite">
       <span class="wordmark-glyph" aria-hidden="true">
         <i></i>
@@ -52,8 +55,8 @@ const path = Astro.url.pathname;
 
 <style>
   .site-header {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    inset: 0 0 auto 0;
     z-index: 40;
     height: var(--nav-h);
     padding-top: env(safe-area-inset-top);

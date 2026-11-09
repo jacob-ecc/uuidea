@@ -68,15 +68,8 @@ const {
   .copy-btn:not(.btn-icon) .ico-check {
     left: 18px;
   }
-  .lbl {
-    display: inline-grid;
-  }
-  .lbl > span {
-    grid-area: 1 / 1;
-    transition: opacity 200ms var(--ease-out);
-  }
   .lbl-done {
-    opacity: 0;
+    display: none;
   }
   .copy-btn[data-copied] .ico-copy {
     opacity: 0;
@@ -87,9 +80,9 @@ const {
     transform: none;
   }
   .copy-btn[data-copied] .lbl-copy {
-    opacity: 0;
+    display: none;
   }
   .copy-btn[data-copied] .lbl-done {
-    opacity: 1;
+    display: inline;
   }
 </style>

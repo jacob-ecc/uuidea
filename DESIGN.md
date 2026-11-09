@@ -14,7 +14,7 @@
   Beschriftung“; ein einziges atmosphärisches Glühen pro Viewport.
 - **Eigenes Motiv – „Segment-Spektrum“:** Eine UUID besteht aus 5 Gruppen
   (8-4-4-4-12). Jede Gruppe bekommt einen eigenen Ton aus einem kühlen→warmen
-  Spektrum (Aqua → Sky → Iris → Orchid → Coral). Dieses Spektrum ist _das_
+  Spektrum (Sky → Aqua → Mint → Gold → Coral, bewusst ohne Violett). Dieses Spektrum ist _das_
   wiederkehrende Gestaltungselement: in UUIDs, als Hairline-Verlauf unter dem
   Header, im Glow hinter dem Hero, in Spiel-Akzenten. Sonst bleibt die Seite
   monochrom.
@@ -41,7 +41,7 @@ Laborgerät, das einem zuzwinkert.
 | ------------ | --------- | --------------------- | ----------------------------------------------------------------------------------- |
 | `ink`        | `#F2F4F8` | 18.2 : 1              | Headlines, wichtiger Text                                                           |
 | `ink-muted`  | `#B8BFCC` | 10.8 : 1              | Fließtext                                                                           |
-| `ink-subtle` | `#8A93A3` | 6.4 : 1               | Meta, Captions, Eyebrows                                                            |
+| `ink-subtle` | `#8A93A3` | 6.4 : 1               | nur Labels, Eyebrows, Captions – Fließtext immer `ink-muted` (Taste-Ziel ≥ 7 : 1)   |
 | `ink-faint`  | `#5B6373` | 3.3 : 1               | **nur dekorativ** (Hintergrund-UUIDs, Platzhalter-Glyphen), nie für lesbaren Inhalt |
 
 ### Akzente
@@ -59,16 +59,17 @@ Flächenfarbe für große Bereiche, nur für Badges, Zahlen, Linien.
 
 ### Segment-Spektrum (Signature)
 
-| Segment                    | Token   | Wert             |
-| -------------------------- | ------- | ---------------- |
-| 1 (8 Zeichen, time_low)    | `seg-1` | `#5CE1E6` Aqua   |
-| 2 (4, time_mid)            | `seg-2` | `#7AB8FF` Sky    |
-| 3 (4, version + time_hi)   | `seg-3` | `#A99BFF` Iris   |
-| 4 (4, variant + clock_seq) | `seg-4` | `#E59BF0` Orchid |
-| 5 (12, node)               | `seg-5` | `#FF8F70` Coral  |
+| Segment                    | Token   | Wert            |
+| -------------------------- | ------- | --------------- |
+| 1 (8 Zeichen, time_low)    | `seg-1` | `#7AB8FF` Sky   |
+| 2 (4, time_mid)            | `seg-2` | `#5CE1E6` Aqua  |
+| 3 (4, version + time_hi)   | `seg-3` | `#74E0A8` Mint  |
+| 4 (4, variant + clock_seq) | `seg-4` | `#F2C46D` Gold  |
+| 5 (12, node)               | `seg-5` | `#FF8F70` Coral |
 
-Alle Segmentfarben haben ≥ 8.4 : 1 auf `canvas` und ≥ 7.1 : 1 auf `surface-3` (nachgerechnet).
-Bindestriche werden in `ink-faint` gesetzt. Für Fließtext-UUIDs (klein, z. B.
+Alle Segmentfarben haben ≥ 8.9 : 1 auf `canvas` und ≥ 7.6 : 1 auf `surface-3` (nachgerechnet).
+Kein Violett/Lavendel im Seitendesign (Taste-Skill-Regel).
+Bindestriche werden in `ink-subtle` gesetzt. Für Fließtext-UUIDs (klein, z. B.
 in Listen) darf die Färbung entfallen (`plain`-Variante). Dann gilt `ink-muted`.
 
 Das Spektrum als Verlauf: `linear-gradient(90deg, seg-1, seg-2, seg-3, seg-4, seg-5)`.
@@ -123,7 +124,8 @@ Regeln:
 `1`=4 · `2`=8 · `3`=12 · `4`=16 · `6`=24 · `8`=32 · `12`=48 · `16`=64 · `24`=96 · `32`=128
 
 - Seiten-Gutter: 16px mobil (+ `env(safe-area-inset-*)`), 24px ab 768px, 32px ab 1280px.
-- Container max. 1120px; Leseinhalte max. 68ch.
+- `.wrap`: `min(100% − 2 × Gutter, 1280px)`; Gutter 24px (mobil) · 48px (≥ 1024) · 80px (≥ 1280). Leseinhalte max. 68ch.
+- 12-Spalten-Raster mit 24px Gap; Splits immer 7/5 auf derselben Linie.
 - Sektionsabstand: 64px mobil, 96px Desktop.
 - Karteninnenabstand: 20px mobil, 24px Desktop.
 
@@ -152,11 +154,9 @@ Tiefe entsteht über **Surface-Leiter + Hairline**, nicht über schwarze Schatte
 
 Atmosphäre:
 
-- **Hero-Aura:** ein großer, weich geblurrter radialer Verlauf aus dem
-  Segment-Spektrum hinter dem Hero (Opacity ≤ 0.22), langsam driftend (60s).
-  Genau einmal pro Seite.
+- **Hero-Aura:** vorgerendertes WebP (`public/aura.webp`, 5 KB, `scripts/gen-assets.mjs`) als
+  `<img>`-Hintergrundebene des Heros, unterhalb des Headers; atmet nur über die Deckkraft.
 - **Spektrum-Hairline:** 1px Verlauf unter dem Header (Opacity 0.5).
-- **Grain:** feines SVG-Rauschen über dem Canvas (Opacity 0.035), verhindert Banding.
 - **Hintergrund-UUIDs:** die Session-UUID als riesige Mono-Glyphen in `ink-faint`
   bei Opacity ≤ 0.05 im Footer. Rein dekorativ, `aria-hidden`.
 
@@ -268,3 +268,20 @@ env(safe-area-inset-bottom)`, `surface-1` mit 80 % Deckkraft + Backdrop-Blur,
 Du-Form, knapp, warm, mit einem Augenzwinkern. Keine Marketing-Floskeln.
 Technische Begriffe korrekt (Version, Variante, Namespace), aber erklärt.
 Beispiel: „Das ist deine Session-UUID. Es gibt sie nur dieses eine Mal.“
+
+## 11. Taste-Skill (Hybrid)
+
+Der installierte Taste Skill (`design-taste-frontend`) bestimmt die **Showcase-Seiten**
+(Home, Spiele-Übersicht, About). Tool- und Spielseiten sind App-UI und folgen nur seinen
+Qualitäts-Checks (Kontrast, Fokus, Tap-Größen, Kanten).
+
+- Kind `software`; `<html data-type="software">` und die Metas `page-type`/`site-kind` im Layout.
+- Header `header.nav` ist fixiert. Showcase-Sektionen sind `.screen` = genau `--h × 100svh`
+  (mobil mindestens `100lvh`); der Hero füllt den ersten Bildschirm allein.
+- Close und Footer sind zusammen ein Bildschirm (`footer.closing`, Prop `showcase` am Layout).
+- Hero-Entrance über `data-enter` + `html.m-enter` (ohne JS steht alles sofort).
+- Ein gedealter Moment pro Seite (Home: `letters-assemble`), unverändert aus dem Kit in
+  `public/assets/moments/` (nie editieren, nicht formatieren).
+- Visuals und Mocks tragen `data-ui`; Überschriften nennen Dinge, Buttons = Verb + Objekt,
+  höchstens ein Eyebrow pro Bereich.
+- Prüfen mit `consistency.mjs` auf dem Build in `dist/` (Befehl in der README) – Ziel: 0 FAIL.

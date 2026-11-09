@@ -4,7 +4,17 @@ import astro from 'eslint-plugin-astro';
 import globals from 'globals';
 
 export default tseslint.config(
-  { ignores: ['dist/', '.astro/', 'node_modules/', 'test-results/', 'playwright-report/'] },
+  {
+    ignores: [
+      'public/assets/',
+      '.taste-skill/',
+      'dist/',
+      '.astro/',
+      'node_modules/',
+      'test-results/',
+      'playwright-report/',
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.strict,
   ...astro.configs.recommended,

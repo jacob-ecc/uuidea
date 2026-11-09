@@ -23,10 +23,11 @@
   --color-accent-2: #ff8f70;
   --color-on-accent-2: #1a0904;
 
-  --color-seg-1: #5ce1e6;
-  --color-seg-2: #7ab8ff;
-  --color-seg-3: #a99bff;
-  --color-seg-4: #e59bf0;
+  /* Segment-Spektrum: Sky → Aqua → Mint → Gold → Coral (kein Violett) */
+  --color-seg-1: #7ab8ff;
+  --color-seg-2: #5ce1e6;
+  --color-seg-3: #74e0a8;
+  --color-seg-4: #f2c46d;
   --color-seg-5: #ff8f70;
 
   --color-success: #4ade9a;
@@ -60,16 +61,16 @@
     color-scheme: dark;
     --nav-h: 64px;
     --bottom-h: calc(64px + env(safe-area-inset-bottom));
-    --gutter: max(16px, env(safe-area-inset-left));
+    --gutter: max(24px, env(safe-area-inset-left), env(safe-area-inset-right));
   }
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     :root {
-      --gutter: 24px;
+      --gutter: 48px;
     }
   }
   @media (min-width: 1280px) {
     :root {
-      --gutter: 32px;
+      --gutter: 80px;
     }
   }
 
@@ -77,7 +78,7 @@
     background: var(--color-canvas);
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
-    scroll-padding-top: calc(var(--nav-h) + 16px);
+    scroll-padding-top: 0;
   }
   body {
     min-height: 100dvh;
@@ -122,11 +123,40 @@
 }
 
 @layer components {
-  .container-page {
-    width: 100%;
-    max-width: calc(1120px + 2 * var(--gutter));
+  /* Inhaltskante = Box-Kante (keine Innenabstände), damit alle Blöcke auf zwei Linien liegen */
+  .wrap {
+    width: min(100% - 2 * var(--gutter), 1280px);
     margin-inline: auto;
-    padding-inline: var(--gutter);
+  }
+  /* Showcase-Sektionen: genau ein Bildschirm (wächst mobil mit dem Inhalt) */
+  .screen {
+    position: relative;
+    box-sizing: border-box;
+    height: calc(var(--h, 1) * 100svh);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: calc(var(--nav-h) + 32px) 0 48px;
+  }
+  .screen > .wrap {
+    position: relative;
+    z-index: 1;
+  }
+  @media (max-width: 639px) {
+    .screen {
+      height: auto;
+      min-height: calc(var(--hm, 1) * 100lvh);
+      padding: calc(var(--nav-h) + 24px) 0 calc(40px + var(--bottom-h));
+    }
+  }
+  /* Kit-Aliase für den Taste-Moment (assets/moments) */
+  :root {
+    --font-display: var(--font-sans);
+    --display-weight: 600;
+    --ink: var(--color-ink);
+    --muted: var(--color-ink-muted);
+    --s-6: 24px;
+    --t-lead: 18px;
   }
   .eyebrow {
     font-family: var(--font-mono);
@@ -319,15 +349,16 @@
     color: var(--color-seg-5);
   }
   .uuid .dash {
-    color: var(--color-ink-faint);
+    color: var(--color-ink-subtle);
   }
   /* Große UUID: passt immer in eine Zeile (36 Zeichen à 0,6em ≈ 21,6em) */
   .uuid-xl {
     font-family: var(--font-mono);
-    font-size: min(3.1rem, calc((100vw - 2 * var(--gutter)) / 22));
+    /* 36 Zeichen à 0,6em = 21,6em → füllt die .wrap exakt */
+    font-size: calc(min(100vw - 2 * var(--gutter), 1280px) / 21.6);
     font-weight: 500;
     line-height: 1.25;
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
     white-space: nowrap;
   }
   .uuid-xl.uuid,
@@ -379,32 +410,23 @@
 }
 
 /* Atmosphäre */
-.grain {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 60;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
 
+/* Hero-Aura: vorgerendertes, weiches Verlaufsbild (scripts/gen-assets.mjs), Hintergrundebene des Heros */
 .aura {
   position: absolute;
-  inset: -20% -30% auto -30%;
-  height: 120%;
+  top: calc(var(--nav-h) + env(safe-area-inset-top));
+  left: 0;
+  width: 100%;
+  height: calc(100% - var(--nav-h) - env(safe-area-inset-top));
+  object-fit: cover;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.22;
-  filter: blur(80px);
-  background:
-    radial-gradient(38% 34% at 30% 40%, var(--color-seg-1), transparent 70%),
-    radial-gradient(30% 30% at 55% 30%, var(--color-seg-3), transparent 70%),
-    radial-gradient(34% 32% at 75% 55%, var(--color-seg-5), transparent 70%);
-  animation: aura-drift 60s var(--ease-in-out) infinite alternate;
+  opacity: 0.5;
+  animation: aura-breathe 12s var(--ease-in-out) infinite alternate;
 }
-@keyframes aura-drift {
+@keyframes aura-breathe {
   to {
-    transform: translate3d(4%, 6%, 0) rotate(8deg) scale(1.08);
+    opacity: 0.32;
   }
 }
 
@@ -418,8 +440,22 @@
     transform: none;
   }
 }
-.enter {
-  animation: fade-up 360ms var(--ease-out) both;
+/* Hero-Entrance: nur wenn JS läuft (html.m-enter), sonst steht alles sofort */
+.m-enter [data-enter] .enter,
+.m-enter .enter-page .enter {
+  animation: fade-up 520ms var(--ease-out) both;
+}
+.m-enter [data-enter] .enter:nth-child(2) {
+  animation-delay: 60ms;
+}
+.m-enter [data-enter] .enter:nth-child(3) {
+  animation-delay: 120ms;
+}
+.m-enter [data-enter] .enter:nth-child(4) {
+  animation-delay: 180ms;
+}
+.m-enter [data-enter] .enter:nth-child(n + 5) {
+  animation-delay: 240ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -437,4 +473,21 @@
   .btn:active {
     transform: none;
   }
+}
+
+.skip-link {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  z-index: 100;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: 500;
+  transform: translateY(-200%);
+  transition: transform 200ms var(--ease-out);
+}
+.skip-link:focus {
+  transform: none;
 }

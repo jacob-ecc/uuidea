@@ -1,37 +1,49 @@
 ---
+/**
+ * Footer. Mit `closing` (Showcase-Seiten) ist er ein eigener Bildschirm:
+ * Reihe 1 = der Close (Slot), Reihe 2 = Links und Rechtliches (Taste-Skill: footer.closing).
+ */
 import { t } from '@/i18n';
+
+interface Props {
+  closing?: boolean;
+}
+const { closing = false } = Astro.props;
 ---
 
-<footer class="site-footer">
-  <div class="footer-ghost uuid" aria-hidden="true" data-session-ghost>
-    00000000-0000-4000-8000-000000000000
-  </div>
-  <div class="container-page relative py-12 md:py-16">
-    <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-      <div class="space-y-3">
-        <p class="eyebrow">{t.footer.sessionLabel}</p>
-        <p class="text-[15px] break-all">
-          <span class="uuid text-ink-muted" data-session-uuid translate="no">
-            …
-          </span>
-        </p>
-        <p class="t-serif text-xl text-ink">{t.footer.tagline}</p>
+<footer class:list={['site-footer', closing && 'closing screen']}>
+  <div class="wrap footer-wrap">
+    {closing && <div class="close-row">{<slot />}</div>}
+    <div class="footer-row">
+      <div class="ghost uuid uuid-xl" aria-hidden="true" data-session-ghost>
+        00000000-0000-4000-8000-000000000000
       </div>
-      <div class="space-y-3 text-sm md:text-right">
-        <p class="text-ink-subtle">{t.footer.noTracking}</p>
-        <ul class="flex gap-2 md:justify-end">
-          <li>
-            <a class="btn btn-ghost -ml-3 md:ml-0" href="/impressum">
-              {t.footer.impressum}
-            </a>
-          </li>
-          <li>
-            <a class="btn btn-ghost" href="/datenschutz">
-              {t.footer.datenschutz}
-            </a>
-          </li>
-        </ul>
-        <p class="font-mono text-xs text-ink-subtle">© {new Date().getFullYear()} uuidea.de</p>
+      <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div class="space-y-2">
+          <p class="eyebrow">{t.footer.sessionLabel}</p>
+          <p class="text-[15px]">
+            <span class="uuid text-ink-muted" data-session-uuid translate="no">
+              …
+            </span>
+          </p>
+          <p class="t-serif text-xl text-ink">{t.footer.tagline}</p>
+        </div>
+        <div class="space-y-2 text-sm md:text-right">
+          <p class="text-ink-muted">{t.footer.noTracking}</p>
+          <ul class="flex gap-6 md:justify-end">
+            <li>
+              <a class="foot-link" href="/impressum">
+                {t.footer.impressum}
+              </a>
+            </li>
+            <li>
+              <a class="foot-link" href="/datenschutz">
+                {t.footer.datenschutz}
+              </a>
+            </li>
+          </ul>
+          <p class="font-mono text-xs text-ink-muted">© {new Date().getFullYear()} uuidea.de</p>
+        </div>
       </div>
     </div>
   </div>
@@ -43,25 +55,66 @@ import { t } from '@/i18n';
     overflow: hidden;
     border-top: 1px solid var(--color-hairline);
     margin-top: 96px;
-    padding-bottom: var(--bottom-h);
+    padding: 48px 0 calc(32px + var(--bottom-h));
   }
   @media (min-width: 768px) {
     .site-footer {
-      padding-bottom: 0;
+      padding-bottom: 48px;
     }
   }
-  .footer-ghost {
+  .site-footer.closing {
+    margin-top: 0;
+    border-top: 0;
+    padding: calc(var(--nav-h) + 32px) 0 calc(32px + var(--bottom-h));
+  }
+  @media (min-width: 768px) {
+    .site-footer.closing {
+      padding-bottom: 72px;
+    }
+  }
+  .closing .footer-wrap {
+    flex: 1;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: 32px;
+  }
+  .close-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .footer-row {
+    position: relative;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-hairline);
+  }
+  .ghost {
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-size: clamp(64px, 14vw, 180px);
-    line-height: 1;
-    white-space: nowrap;
-    word-break: normal;
+    left: 0;
+    bottom: 100%;
+    margin-bottom: 8px;
     color: var(--color-ink);
-    opacity: 0.035;
+    opacity: 0.05;
     pointer-events: none;
     user-select: none;
+  }
+  .site-footer:not(.closing) .ghost {
+    display: none;
+  }
+  .foot-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--color-ink-muted);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    transition:
+      color 200ms var(--ease-out),
+      text-decoration-color 200ms var(--ease-out);
+  }
+  .foot-link:hover {
+    color: var(--color-ink);
+    text-decoration-color: currentColor;
   }
 </style>
