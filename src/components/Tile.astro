@@ -73,6 +73,11 @@ const { href, eyebrow, title, description, class: cls } = Astro.props;
       radial-gradient(80% 120% at 50% 100%, rgb(255 255 255 / 0.03), transparent 70%),
       var(--color-surface-1);
   }
+  @media (min-width: 1024px) {
+    .tile-visual {
+      height: 240px;
+    }
+  }
   .tile-body {
     padding: 20px;
   }

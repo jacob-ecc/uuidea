@@ -61,16 +61,23 @@
     color-scheme: dark;
     --nav-h: 64px;
     --bottom-h: calc(64px + env(safe-area-inset-bottom));
-    --gutter: max(24px, env(safe-area-inset-left), env(safe-area-inset-right));
+    /* --gut = Seitenrand, --gutter = Spaltenabstand im 12er-Raster (Kit-Konvention) */
+    --gutter: 12px;
+    --gut: max(24px, env(safe-area-inset-left), env(safe-area-inset-right));
+  }
+  @media (min-width: 640px) {
+    :root {
+      --gutter: 24px;
+    }
   }
   @media (min-width: 1024px) {
     :root {
-      --gutter: 48px;
+      --gut: 48px;
     }
   }
   @media (min-width: 1280px) {
     :root {
-      --gutter: 80px;
+      --gut: 80px;
     }
   }
 
@@ -125,7 +132,7 @@
 @layer components {
   /* Inhaltskante = Box-Kante (keine Innenabstände), damit alle Blöcke auf zwei Linien liegen */
   .wrap {
-    width: min(100% - 2 * var(--gutter), 1280px);
+    width: min(100% - 2 * var(--gut), 1280px);
     margin-inline: auto;
   }
   /* Showcase-Sektionen: genau ein Bildschirm (wächst mobil mit dem Inhalt) */
@@ -355,7 +362,7 @@
   .uuid-xl {
     font-family: var(--font-mono);
     /* 36 Zeichen à 0,6em = 21,6em → füllt die .wrap exakt */
-    font-size: calc(min(100vw - 2 * var(--gutter), 1280px) / 21.6);
+    font-size: calc(min(100vw - 2 * var(--gut), 1280px) / 21.6);
     font-weight: 500;
     line-height: 1.25;
     letter-spacing: 0;

@@ -181,13 +181,13 @@ const group = (i: number) => (i < 8 ? 1 : i < 12 ? 2 : i < 16 ? 3 : i < 20 ? 4 :
     </div>
   </section>
 
-  <section class="screen" aria-labelledby="explore-title">
+  <section class="screen explore" aria-labelledby="explore-title">
     <div class="wrap">
       <h2 id="explore-title" class="t-h2">
         {h.exploreTitle}
       </h2>
       <p class="mt-3 text-ink-muted">{h.exploreLead}</p>
-      <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
         <Tile
           href="/tools"
           eyebrow={h.tiles.tools.k}
@@ -521,6 +521,10 @@ const group = (i: number) => (i < 8 ? 1 : i < 12 ? 2 : i < 16 ? 3 : i < 20 ? 4 :
     grid-column: 1 / -1;
   }
 
+  /* mobil: drei gestapelte Kacheln = genau zwei Bildschirme */
+  .explore {
+    --hm: 2;
+  }
   .v-tools {
     width: 100%;
     height: 100%;
