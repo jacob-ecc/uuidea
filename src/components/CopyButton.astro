@@ -1,0 +1,95 @@
+---
+import Icon from './Icon.astro';
+import { t } from '@/i18n';
+
+interface Props {
+  from?: string;
+  text?: string;
+  label?: string;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'md' | 'lg';
+  iconOnly?: boolean;
+  class?: string;
+}
+const {
+  from,
+  text,
+  label = t.common.copy,
+  variant = 'secondary',
+  size = 'md',
+  iconOnly = false,
+  class: cls,
+} = Astro.props;
+---
+
+<button
+  type="button"
+  class:list={[
+    'btn copy-btn',
+    `btn-${variant}`,
+    size === 'lg' && 'btn-lg',
+    iconOnly && 'btn-icon',
+    cls,
+  ]}
+  data-copy-from={from}
+  data-copy={text}
+  aria-label={iconOnly ? label : undefined}
+>
+  <span class="ico ico-copy">
+    <Icon name="copy" />
+  </span>
+  <span class="ico ico-check">
+    <Icon name="check" />
+  </span>
+  {!iconOnly && (
+    <span class="lbl">
+      <span class="lbl-copy">{label}</span>
+      <span class="lbl-done">{t.common.copied}</span>
+    </span>
+  )}
+</button>
+
+<style>
+  .copy-btn {
+    position: relative;
+  }
+  .ico {
+    display: inline-flex;
+    transition:
+      opacity 200ms var(--ease-out),
+      transform 200ms var(--ease-out);
+  }
+  .ico-check {
+    position: absolute;
+    opacity: 0;
+    transform: scale(0.6);
+    color: var(--color-success);
+  }
+  .copy-btn:not(.btn-icon) .ico-check {
+    left: 18px;
+  }
+  .lbl {
+    display: inline-grid;
+  }
+  .lbl > span {
+    grid-area: 1 / 1;
+    transition: opacity 200ms var(--ease-out);
+  }
+  .lbl-done {
+    opacity: 0;
+  }
+  .copy-btn[data-copied] .ico-copy {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  .copy-btn[data-copied] .ico-check {
+    opacity: 1;
+    transform: none;
+  }
+  .copy-btn[data-copied] .lbl-copy {
+    opacity: 0;
+  }
+  .copy-btn[data-copied] .lbl-done {
+    opacity: 1;
+  }
+</style>

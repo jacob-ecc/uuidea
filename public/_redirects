@@ -1,0 +1,2 @@
+# www → Apex (greift, sobald www.uuidea.de als Custom Domain am Pages-Projekt hängt)
+https://www.uuidea.de/* https://uuidea.de/:splat 301

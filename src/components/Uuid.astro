@@ -1,0 +1,21 @@
+---
+/** Signature-Darstellung einer UUID (server-seitig gerendert). */
+import { segmentHtml } from '@/lib/uuid/segments';
+
+interface Props {
+  value: string;
+  plain?: boolean;
+  class?: string;
+  id?: string;
+}
+const { value, plain = false, class: cls, id } = Astro.props;
+---
+
+<span
+  id={id}
+  class:list={['uuid', plain && 'uuid-plain', cls]}
+  translate="no"
+  aria-label={value}
+  data-uuid={value}
+  set:html={plain ? value : segmentHtml(value)}
+/>

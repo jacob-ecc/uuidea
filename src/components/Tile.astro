@@ -1,0 +1,95 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  href: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  class?: string;
+}
+const { href, eyebrow, title, description, class: cls } = Astro.props;
+---
+
+<a href={href} class:list={['tile card', cls]}>
+  <div class="tile-visual" aria-hidden="true">
+    <slot />
+  </div>
+  <div class="tile-body">
+    <p class="eyebrow">{eyebrow}</p>
+    <h3 class="t-h3 mt-2 flex items-center justify-between gap-3 text-ink">
+      <span>{title}</span>
+      <span class="tile-arrow">
+        <Icon name="arrow" />
+      </span>
+    </h3>
+    <p class="mt-2 text-[15px] text-ink-subtle">{description}</p>
+  </div>
+</a>
+
+<style>
+  .tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    text-decoration: none;
+    transition:
+      border-color 200ms var(--ease-out),
+      transform 200ms var(--ease-out),
+      background-color 200ms var(--ease-out);
+  }
+  .tile::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: var(--spectrum);
+    opacity: 0;
+    transition: opacity 200ms var(--ease-out);
+  }
+  .tile:hover,
+  .tile:focus-visible {
+    border-color: var(--color-hairline-strong);
+    background: var(--color-surface-2);
+  }
+  .tile:hover::before,
+  .tile:focus-visible::before {
+    opacity: 1;
+  }
+  .tile:active {
+    transform: scale(0.99);
+  }
+  .tile:focus-visible {
+    border-radius: var(--radius-lg);
+  }
+  .tile-visual {
+    height: 132px;
+    border-bottom: 1px solid var(--color-hairline);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background:
+      radial-gradient(80% 120% at 50% 100%, rgb(255 255 255 / 0.03), transparent 70%),
+      var(--color-surface-1);
+  }
+  .tile-body {
+    padding: 20px;
+  }
+  @media (min-width: 768px) {
+    .tile-body {
+      padding: 24px;
+    }
+  }
+  .tile-arrow {
+    color: var(--color-ink-subtle);
+    transition:
+      transform 200ms var(--ease-out),
+      color 200ms var(--ease-out);
+  }
+  .tile:hover .tile-arrow,
+  .tile:focus-visible .tile-arrow {
+    transform: translateX(3px);
+    color: var(--color-accent);
+  }
+</style>

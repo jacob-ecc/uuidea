@@ -1,0 +1,24 @@
+---
+/** Deutlich markierter Platzhalter für Inhalte, die der Betreiber selbst ergänzt. */
+import { t } from '@/i18n';
+interface Props {
+  hint: string;
+}
+const { hint } = Astro.props;
+---
+
+<div class="placeholder card">
+  <p class="badge badge-accent-2">{t.legal.placeholder}</p>
+  <p class="mt-3 text-ink-muted">{hint}</p>
+  <div class="mt-3 text-ink-subtle">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .placeholder {
+    padding: 20px;
+    border-style: dashed;
+    border-color: color-mix(in oklab, var(--color-accent-2) 45%, transparent);
+  }
+</style>
