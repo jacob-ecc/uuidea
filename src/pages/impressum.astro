@@ -1,0 +1,20 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Placeholder from '@/components/Placeholder.astro';
+import { t } from '@/i18n';
+---
+
+<BaseLayout title={`${t.legal.impressumTitle} – uuidea`} description="Impressum von uuidea.de">
+  <PageHeader eyebrow="Rechtliches" title={t.legal.impressumTitle} />
+  <div class="container-page prose-w space-y-6">
+    <!-- TODO(Betreiber): Impressum gemäß § 5 DDG ergänzen. -->
+    <Placeholder hint="Angaben gemäß § 5 DDG – bitte hier ergänzen:">
+      <ul class="list-disc space-y-1 pl-5">
+        <li>Name und Anschrift</li>
+        <li>Kontakt (E-Mail, ggf. Telefon)</li>
+        <li>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV (falls zutreffend)</li>
+      </ul>
+    </Placeholder>
+  </div>
+</BaseLayout>

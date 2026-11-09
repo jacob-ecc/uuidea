@@ -1,0 +1,25 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Uuid from '@/components/Uuid.astro';
+import Icon from '@/components/Icon.astro';
+import { t } from '@/i18n';
+---
+
+<BaseLayout title={`${t.notFound.title} – uuidea`} noindex>
+  <section class="container-page relative pt-16 pb-12 md:pt-28">
+    <p class="eyebrow enter">Fehler 404 · Nil-UUID</p>
+    <p class="enter mt-4 text-lg text-ink-muted">{t.notFound.lead}</p>
+    <h1 class="uuid-xl enter mt-3">
+      <Uuid value="00000000-0000-0000-0000-000000000000" />
+      <span class="sr-only">– nicht gefunden</span>
+    </h1>
+    <p class="t-serif enter mt-4 text-3xl text-ink md:text-4xl">nicht gefunden.</p>
+    <p class="enter prose-w mt-6 text-ink-muted">{t.notFound.text}</p>
+    <a href="/" class="btn btn-primary btn-lg enter mt-8">
+      {t.notFound.back}
+      <Icon name="arrow" />
+    </a>
+  </section>
+</BaseLayout>
+
+<style></style>

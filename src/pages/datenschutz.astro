@@ -1,0 +1,40 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Placeholder from '@/components/Placeholder.astro';
+import { t } from '@/i18n';
+---
+
+<BaseLayout
+  title={`${t.legal.datenschutzTitle} – uuidea`}
+  description="Datenschutzhinweise von uuidea.de"
+>
+  <PageHeader eyebrow="Rechtliches" title={t.legal.datenschutzTitle} />
+  <div class="container-page prose-w space-y-8">
+    <section class="space-y-3">
+      <h2 class="t-h3">Kurz gesagt</h2>
+      <p>
+        uuidea.de verwendet keine Cookies, kein Tracking, keine Analytics und lädt keine Inhalte von
+        Drittservern. Fonts werden selbst ausgeliefert. Alle UUIDs und Spielrunden entstehen lokal
+        in deinem Browser.
+      </p>
+      <p>
+        Bestleistungen und dein Spielverlauf werden ausschließlich im
+        <code class="font-mono text-ink">localStorage</code> deines Browsers gespeichert. Die
+        Session-UUID liegt im <code class="font-mono text-ink">sessionStorage</code> und
+        verschwindet, wenn du den Tab schließt. Du kannst beides jederzeit über die
+        Browser-Einstellungen löschen.
+      </p>
+    </section>
+    <!-- TODO(Betreiber): vollständige Datenschutzerklärung ergänzen. -->
+    <Placeholder hint="Bitte hier ergänzen:">
+      <ul class="list-disc space-y-1 pl-5">
+        <li>Verantwortliche Stelle (Name, Anschrift, Kontakt)</li>
+        <li>
+          Hosting über Cloudflare Pages (Server-Logs, Auftragsverarbeitung, Drittlandtransfer)
+        </li>
+        <li>Rechte der betroffenen Personen (Art. 15–21 DSGVO), Beschwerderecht</li>
+      </ul>
+    </Placeholder>
+  </div>
+</BaseLayout>

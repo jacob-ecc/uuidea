@@ -1,0 +1,367 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CopyButton from '@/components/CopyButton.astro';
+import Icon from '@/components/Icon.astro';
+import Tile from '@/components/Tile.astro';
+import Uuid from '@/components/Uuid.astro';
+import { t } from '@/i18n';
+
+const h = t.home;
+// Statische Beispiel-UUIDs für die Kachel-Visuals (rein dekorativ)
+const sample = [
+  '0192f4c1-7a3e-7b21-9c4d-5e8f3a1b2c3d',
+  'f47ac10b-58cc-4372-a567-0e02b2c3d479',
+  '886313e1-3b8a-5372-9b90-0c9aee199e5d',
+];
+const grid = [1, 3, 5, 2, 4, 1, 5, 3, 2, 5, 1, 4, 3, 2, 4, 1];
+---
+
+<BaseLayout title={h.title} description={h.description}>
+  <section class="hero">
+    <div class="aura" aria-hidden="true"></div>
+    <div class="container-page relative z-10 pt-14 pb-16 md:pt-28 md:pb-24">
+      <p class="eyebrow enter flex items-center gap-2">
+        <span class="live-dot" aria-hidden="true"></span>
+        {h.eyebrow}
+      </p>
+
+      <h1 class="sr-only">
+        {h.lead} {h.leadSerif}
+      </h1>
+
+      <div class="hero-uuid-wrap enter mt-6">
+        <output
+          id="hero-uuid"
+          class="uuid uuid-xl hero-uuid"
+          translate="no"
+          aria-label="Session-UUID"
+        >
+          <noscript>JavaScript wird benötigt</noscript>
+        </output>
+        <div class="anatomy uuid-xl" aria-hidden="true">
+          <span class="a1">
+            <i></i>
+            <b>time_low</b>
+          </span>
+          <span class="a2">
+            <i></i>
+            <b>time_mid</b>
+          </span>
+          <span class="a3">
+            <i></i>
+            <b>ver · hi</b>
+          </span>
+          <span class="a4">
+            <i></i>
+            <b>var · seq</b>
+          </span>
+          <span class="a5">
+            <i></i>
+            <b>node</b>
+          </span>
+        </div>
+        <p id="hero-status" class="sr-only" aria-live="polite"></p>
+      </div>
+
+      <p class="hero-lead enter mt-6 text-ink" aria-hidden="true">
+        {h.lead}
+        <span class="t-serif text-ink">{h.leadSerif}</span>
+      </p>
+
+      <div class="enter mt-8 flex flex-wrap gap-3">
+        <CopyButton from="#hero-uuid" variant="primary" size="lg" />
+        <button type="button" class="btn btn-secondary btn-lg" id="new-uuid">
+          <span class="spin-ico">
+            <Icon name="refresh" />
+          </span>
+          {t.common.newUuid}
+        </button>
+      </div>
+
+      <p class="enter mt-6 flex max-w-[52ch] items-start gap-2 text-sm text-ink-subtle">
+        <Icon name="shield" size={16} class="mt-[3px] shrink-0 text-accent" />
+        <span>{h.privacy}</span>
+      </p>
+    </div>
+  </section>
+
+  <section class="container-page py-16 md:py-24" aria-labelledby="why-title">
+    <div class="grid gap-10 md:grid-cols-[1fr_1.4fr] md:gap-16">
+      <div>
+        <p class="eyebrow">{h.whyEyebrow}</p>
+        <h2 id="why-title" class="t-h1 mt-3">
+          {h.whyTitle}
+        </h2>
+        <div class="stat card mt-8 p-5">
+          <p class="eyebrow">{h.stats}</p>
+          <p class="mt-2 font-mono text-3xl text-ink tabular">
+            5,3 × 10<sup class="text-[0.55em]">36</sup>
+          </p>
+          <div class="spectrum-line mt-4 opacity-60"></div>
+        </div>
+      </div>
+      <ol class="why-list">
+        {h.why.map((item, i) => (
+          <li class="why-item">
+            <span class={`why-num font-mono s${i + 1}`}>{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3 class="t-h3">{item.k}</h3>
+              <p class="mt-1.5 text-ink-muted">{item.t}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="container-page pb-8" aria-labelledby="explore-title">
+    <p class="eyebrow">{h.exploreEyebrow}</p>
+    <h2 id="explore-title" class="t-h2 mt-3">
+      {h.exploreTitle}
+    </h2>
+    <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <Tile
+        href="/tools"
+        eyebrow={h.tiles.tools.k}
+        title={h.tiles.tools.t}
+        description={h.tiles.tools.d}
+      >
+        <div class="v-tools">
+          {sample.map((s) => (
+            <Uuid value={s} class="text-[13px]" />
+          ))}
+        </div>
+      </Tile>
+      <Tile
+        href="/games"
+        eyebrow={h.tiles.games.k}
+        title={h.tiles.games.t}
+        description={h.tiles.games.d}
+      >
+        <div class="v-games">
+          {grid.map((g) => (
+            <i class={`c${g}`} />
+          ))}
+        </div>
+      </Tile>
+      <Tile
+        href="/about"
+        eyebrow={h.tiles.about.k}
+        title={h.tiles.about.t}
+        description={h.tiles.about.d}
+        class="md:col-span-2 lg:col-span-1"
+      >
+        <div class="v-about">
+          <span class="t-serif">36</span>
+          <span class="font-mono text-xs text-ink-subtle">Zeichen · 128 Bit</span>
+        </div>
+      </Tile>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { ensureSession, newSessionUuid } from '@/lib/session';
+  import { decryptInto, renderUuidChars } from '@/scripts/decrypt';
+
+  const el = document.getElementById('hero-uuid');
+  const btn = document.getElementById('new-uuid');
+  if (el) {
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    renderUuidChars(el);
+    decryptInto(el, ensureSession(), reduced);
+    btn?.addEventListener('click', () => {
+      btn.classList.remove('spun');
+      void btn.offsetWidth;
+      btn.classList.add('spun');
+      const id = newSessionUuid();
+      decryptInto(el, id, reduced);
+      const st = document.getElementById('hero-status');
+      if (st) st.textContent = 'Neue Session-UUID: ' + id;
+    });
+  }
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .hero-uuid-wrap {
+    animation-delay: 60ms;
+  }
+  .hero-uuid {
+    display: block;
+    min-height: 1.25em;
+    cursor: text;
+    user-select: all;
+  }
+  .hero-uuid :global(.scramble) {
+    opacity: 0.55;
+  }
+  .hero-uuid:global(.is-fade) {
+    animation: fade-up 120ms var(--ease-out) both;
+  }
+  .anatomy {
+    display: grid;
+    grid-template-columns: 8ch 4ch 4ch 4ch 12ch;
+    column-gap: 1ch;
+    margin-top: 0.35em;
+    width: max-content;
+  }
+  .anatomy span {
+    display: grid;
+    gap: 8px;
+  }
+  .anatomy i {
+    display: block;
+    height: 2px;
+    border-radius: 2px;
+    opacity: 0.7;
+  }
+  .anatomy b {
+    display: none;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-subtle);
+    white-space: nowrap;
+  }
+  @media (min-width: 640px) {
+    .anatomy b {
+      display: block;
+    }
+  }
+  .a1 i {
+    background: var(--color-seg-1);
+  }
+  .a2 i {
+    background: var(--color-seg-2);
+  }
+  .a3 i {
+    background: var(--color-seg-3);
+  }
+  .a4 i {
+    background: var(--color-seg-4);
+  }
+  .a5 i {
+    background: var(--color-seg-5);
+  }
+  .hero-lead {
+    font-size: clamp(1.25rem, 1.05rem + 1.2vw, 2rem);
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    max-width: 24ch;
+    animation-delay: 120ms;
+  }
+  .hero-lead .t-serif {
+    display: block;
+    font-size: 1.12em;
+    letter-spacing: -0.005em;
+  }
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: var(--color-accent);
+    box-shadow: 0 0 12px var(--color-accent);
+  }
+  .spin-ico {
+    display: inline-flex;
+  }
+  :global(.spun) .spin-ico {
+    animation: spin 600ms var(--ease-out);
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .why-list {
+    display: grid;
+    gap: 0;
+  }
+  .why-item {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 16px;
+    padding: 24px 0;
+    border-top: 1px solid var(--color-hairline);
+  }
+  .why-item:last-child {
+    border-bottom: 1px solid var(--color-hairline);
+  }
+  .why-num {
+    font-size: 14px;
+    padding-top: 3px;
+  }
+  .why-num.s1 {
+    color: var(--color-seg-1);
+  }
+  .why-num.s2 {
+    color: var(--color-seg-3);
+  }
+  .why-num.s3 {
+    color: var(--color-seg-5);
+  }
+
+  .v-tools {
+    display: grid;
+    gap: 6px;
+    opacity: 0.9;
+    mask-image: linear-gradient(90deg, #000 60%, transparent);
+    transform: translateX(16px);
+    white-space: nowrap;
+  }
+  .v-tools :global(.uuid) {
+    word-break: normal;
+  }
+  .v-games {
+    display: grid;
+    grid-template-columns: repeat(8, 18px);
+    gap: 5px;
+  }
+  .v-games i {
+    display: block;
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    opacity: 0.85;
+  }
+  .v-games i:nth-child(n + 9) {
+    opacity: 0.35;
+  }
+  .v-games .c1 {
+    background: var(--color-seg-1);
+  }
+  .v-games .c2 {
+    background: var(--color-seg-2);
+  }
+  .v-games .c3 {
+    background: var(--color-seg-3);
+  }
+  .v-games .c4 {
+    background: var(--color-seg-4);
+  }
+  .v-games .c5 {
+    background: var(--color-seg-5);
+  }
+  .v-about {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .v-about .t-serif {
+    font-size: 72px;
+    line-height: 1;
+    background: var(--spectrum);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+</style>
