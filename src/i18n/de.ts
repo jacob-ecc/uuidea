@@ -28,67 +28,85 @@ export const de = {
     localOnly: 'Läuft komplett lokal in deinem Browser.',
   },
   home: {
-    title: 'uuidea – UUID-Tools und Spiele, alles lokal im Browser',
+    title: 'uuidea – UUIDs erzeugen, prüfen, verstehen. Und damit spielen.',
     description:
-      'Jeder Besuch bekommt eine eigene UUID. Dazu: Generatoren, Decoder und Spiele, die aus einer UUID entstehen.',
-    eyebrow: 'Session · v4 · zufällig',
-    lead: 'Das ist deine Session-UUID.',
-    leadSerif: 'Es gibt sie nur dieses eine Mal.',
-    privacy:
-      'Erzeugt mit crypto.randomUUID() direkt in deinem Browser. Nichts wird gesendet – nur dieser Tab merkt sie sich, bis du ihn schließt.',
-    facts: [
-      { v: '128', u: 'Bit', k: 'Länge' },
-      { v: '122', u: 'Bit', k: 'davon Zufall' },
-      { v: '5,3 × 10^36', u: '', k: 'mögliche v4-UUIDs' },
-    ],
+      'Deine Session-UUID, ein Werkzeugkasten für v1 bis v7 und Spiele, deren Runden komplett aus einer UUID entstehen. Alles lokal im Browser.',
+    h1: 'Deine Session‑UUID. Es gibt sie nur einmal.',
+    lead: 'Gerade eben in deinem Browser entstanden, aus 122 Bit Zufall. Dazu: Werkzeuge und Spiele rund um UUIDs.',
+    proof: 'Nichts wird gesendet. Nur dieser Tab merkt sie sich.',
+    copy: 'UUID kopieren',
+    renew: 'Neue UUID',
+    inspector: {
+      title: 'uuidea · Inspector',
+      nav: ['Session', 'Generator', 'Decoder', 'Konverter', 'Spiele'],
+      head: 'Session-UUID',
+      bits: '128 Bit',
+      rows: [
+        { k: 'Version', v: '4 · zufällig' },
+        { k: 'Variante', v: 'RFC 9562' },
+        { k: 'Zufall', v: '122 Bit' },
+        { k: 'Base64URL', v: '…', f: 'b64' },
+        { k: 'Base58', v: '…', f: 'b58' },
+      ],
+      check: 'Validator',
+      checkOk: 'Gültig',
+      steps: ['Format 8-4-4-4-12', 'Version-Nibble = 4', 'Varianten-Bits = 10'],
+    },
     statement: 'Eine unter Sextillionen.',
     statementSub:
       'Rund 5,3 Sextillionen v4-UUIDs gibt es. Erzeugst du eine Milliarde pro Sekunde, 85 Jahre lang, steht die Chance auf eine einzige Doppelung bei etwa 50 : 50.',
-    whyTitle: 'Was in 36 Zeichen steckt',
-    why: [
-      {
-        k: 'Fünf Gruppen, immer 8-4-4-4-12',
-        t: '32 Hex-Zeichen, vier Bindestriche. Jede UUID sieht aus wie jede andere – und ist doch anders.',
-      },
-      {
-        k: 'Version und Variante im Inneren',
-        t: 'Ein Zeichen verrät die Version, zwei Bits die Variante. Der Rest ist Zeit, Name oder Zufall.',
-      },
-      {
-        k: 'UUIDs ohne zentrales Register',
-        t: 'Keine Datenbank, keine Absprache: Jede UUID weiß, wer sie ist. Freiheit mit eingebauter Ordnung.',
-      },
+    stats: [
+      { v: '128', k: 'Bit lang, immer' },
+      { v: '122', k: 'Bit davon Zufall' },
+      { v: '36', k: 'Zeichen in fünf Gruppen' },
+      { v: '1000', k: 'UUIDs pro Klick im Generator' },
     ],
-    anatomyTitle: 'Anatomie einer v4-UUID',
-    anatomy: [
-      { k: 'Version', v: '4', d: 'Bits 48–51' },
-      { k: 'Variante', v: '10xx', d: 'Bits 64–65 (RFC 9562)' },
-      { k: 'Zufall', v: '122 Bit', d: 'alle übrigen Bits' },
+    toolsTitle: 'Ein Werkzeugkasten für 36 Zeichen',
+    toolsLead:
+      'Erzeugen, prüfen, dekodieren, umwandeln. Jede Version, jedes Format – und nichts davon verlässt deinen Browser.',
+    toolsCta: 'Tools öffnen',
+    tools: {
+      gen: {
+        k: 'Generator',
+        d: 'v1, v4, v5, v6, v7, Nil und Max. Bis zu 1000 auf einmal, als .txt oder .csv.',
+      },
+      dec: {
+        k: 'Decoder',
+        d: 'Version, Variante und der eingebaute Zeitstempel von v1, v6 und v7.',
+      },
+      conv: {
+        k: 'Konverter',
+        d: 'Mit oder ohne Bindestriche, in Klammern, Base64URL oder Base58.',
+      },
+    },
+    formats: [
+      'v1',
+      'v4',
+      'v5',
+      'v6',
+      'v7',
+      'Nil',
+      'Max',
+      'ULID',
+      'Nano ID',
+      'Base58',
+      'Base64URL',
+      '{Klammern}',
+      'GROSS',
+      'CSV',
+      'TXT',
     ],
-    exploreTitle: 'Werkzeuge und Spiele rund um UUIDs',
-    exploreLead: 'Alles läuft lokal. Kein Konto, kein Tracking, keine Wartezeit.',
+    gamesTitle: 'Spiele, die aus einer UUID entstehen',
+    gamesLead:
+      'Jede Runde wird aus einer UUID berechnet: Kartenlage, Reihenfolge, Wartezeiten. Gleiche UUID, gleiche Runde – teil den Link und vergleicht euch fair.',
+    gamesCta: 'Spiel starten',
+    pipeline: ['UUID', 'cyrb128', 'sfc32', 'Runde'],
+    gameNames: ['Reaktion', 'Memory', 'Sortieren', 'Sequenz', 'Hex-Farben'],
+    challenge: 'Herausforderung von',
+    challengeScore: '14 Züge · 0:48',
     closeTitle: 'Deine nächste UUID wartet schon.',
     closeLead:
       'Generieren, prüfen, dekodieren – oder eine Runde spielen, die nur aus einer UUID besteht.',
-    ctaTools: 'Tools öffnen',
-    ctaGames: 'Spiel starten',
-    tiles: {
-      tools: {
-        k: 'Tools',
-        t: 'UUID-Werkzeugkasten',
-        d: 'v1, v4, v5, v6, v7 – generieren, prüfen, dekodieren, umwandeln. Bis zu 1000 auf einmal.',
-      },
-      games: {
-        k: 'Spiele',
-        t: 'Spiele aus einer UUID',
-        d: 'Jede Runde entsteht aus einer UUID. Link teilen, gleiche Runde, fairer Vergleich.',
-      },
-      about: {
-        k: 'Über',
-        t: 'Warum das alles?',
-        d: 'Eine kleine Liebeserklärung an 36 Zeichen.',
-      },
-    },
   },
   footer: {
     tagline: 'Eindeutig. Seit deinem letzten Refresh.',

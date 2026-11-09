@@ -1,287 +1,146 @@
-# uuidea.de – Design System
+# uuidea.de – Design System (v2, „Präzisionsinstrument“)
 
-> Verbindliche Gestaltungsregeln. Jede UI-Arbeit hält sich daran. Tokens leben in
-> `src/styles/global.css` (`@theme`), dieses Dokument ist die Begründung dazu.
+> Verbindliche Gestaltungsregeln. Tokens leben in `src/styles/global.css` (`@theme`),
+> dieses Dokument ist die Begründung dazu. v2 ersetzt das erste System komplett
+> (Redesign vom 09.11.2026); das Logo (fünf Segment-Balken) bleibt.
 
 ## 1. Richtung
 
-**Referenzen:** Linear (Struktur) + x.ai (Atmosphäre).
+**Referenzen:** x.ai (leichte, große Display-Type, Mono-Labels wie Code-Kommentare),
+Linear (Surface-Leiter, Hairlines, knapper Akzent), OpenCode (Manpage-Präzision).
+Ausgewählt über den Taste Skill (Deal, nicht Geschmack):
 
-- **Von Linear:** fast schwarzer, blaustichiger Canvas; Tiefe über eine Surface-Leiter
-  und 1px-Hairlines statt Drop-Shadows; _ein_ Akzent, knapp eingesetzt; enge,
-  negative Laufweite in Headlines; ruhige, dichte Präzision.
-- **Von x.ai:** Mono-Eyebrows in Versalien mit weitem Tracking als „technische
-  Beschriftung“; ein einziges atmosphärisches Glühen pro Viewport.
-- **Eigenes Motiv – „Segment-Spektrum“:** Eine UUID besteht aus 5 Gruppen
-  (8-4-4-4-12). Jede Gruppe bekommt einen eigenen Ton aus einem kühlen→warmen
-  Spektrum (Sky → Aqua → Mint → Gold → Coral, bewusst ohne Violett). Dieses Spektrum ist _das_
-  wiederkehrende Gestaltungselement: in UUIDs, als Hairline-Verlauf unter dem
-  Header, im Glow hinter dem Hero, in Spiel-Akzenten. Sonst bleibt die Seite
-  monochrom.
+| Deal                 | Ergebnis                                                                                                                            |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| kind                 | `software`                                                                                                                          |
+| Hero                 | `collage` – Text links (5 Spalten), Produktfenster rechts (6 Spalten), vom Rahmen angeschnitten, eine kleine Ergebnis-Karte darüber |
+| Palette              | `blue-black-cornflower` – fast schwarzer, blaustichiger Grund, Kornblumen-Akzent (= Sky aus dem Logo)                               |
+| Type                 | `instrument` – Instrument Sans + DM Mono (selbst gehostet, nicht von Google)                                                        |
+| Radius               | `sharp` (Dev-Tool) – Buttons als Pill                                                                                               |
+| Nav / Footer / Close | `nav-centre` · `footer-dark` · `close-type`                                                                                         |
+| Rhythmus             | `dark-band` – eine Sektion auf einem leicht helleren Band                                                                           |
+| Momente              | `counter-rolls` (Statement), `marquee-row` (Formate)                                                                                |
 
-**Charakter:** präzise, still, ein bisschen verspielt. Wie ein gut beschriftetes
-Laborgerät, das einem zuzwinkert.
+**Charakter:** ein Messinstrument für UUIDs. Die Seite zeigt das echte Ding – den
+Inspector mit Live-UUID und allen 128 Bits – statt darüber zu reden.
 
 ## 2. Farben
 
-### Surfaces (dunkel, blaustichig)
+### Surfaces
 
-| Token             | Wert      | Verwendung                                |
-| ----------------- | --------- | ----------------------------------------- |
-| `canvas`          | `#07080C` | Seitenhintergrund (nie reines Schwarz)    |
-| `surface-1`       | `#0D0F15` | Karten, Panels                            |
-| `surface-2`       | `#12151D` | Gehobene Karten, Inputs, Hover/Active     |
-| `surface-3`       | `#181C26` | Popover, Toasts, gedrückte Zustände       |
-| `hairline`        | `#222733` | Standard-Border 1px                       |
-| `hairline-strong` | `#2E3442` | Inputs, Trenner mit Gewicht, Hover-Border |
+| Token             | Wert      | Verwendung                                       |
+| ----------------- | --------- | ------------------------------------------------ |
+| `canvas`          | `#0A0D14` | Seitenhintergrund                                |
+| `band`            | `#0E121C` | dunkles Band (Tools-Sektion)                     |
+| `surface-1`       | `#131824` | Karten, Panels                                   |
+| `surface-2`       | `#1A2030` | aktive Elemente, schwebende Karte                |
+| `surface-3`       | `#212839` | gedrückte Zustände                               |
+| `hairline`        | `#222A3A` | Standard-Border 1px                              |
+| `hairline-strong` | `#313A4E` | Inputs, Buttons (secondary), Trenner mit Gewicht |
+| Footer            | `#070910` | `footer-dark`                                    |
 
-### Text
+### Text (Kontrast auf `canvas`, nachgerechnet)
 
-| Token        | Wert      | Kontrast auf `canvas` | Verwendung                                                                          |
-| ------------ | --------- | --------------------- | ----------------------------------------------------------------------------------- |
-| `ink`        | `#F2F4F8` | 18.2 : 1              | Headlines, wichtiger Text                                                           |
-| `ink-muted`  | `#B8BFCC` | 10.8 : 1              | Fließtext                                                                           |
-| `ink-subtle` | `#8A93A3` | 6.4 : 1               | nur Labels, Eyebrows, Captions – Fließtext immer `ink-muted` (Taste-Ziel ≥ 7 : 1)   |
-| `ink-faint`  | `#5B6373` | 3.3 : 1               | **nur dekorativ** (Hintergrund-UUIDs, Platzhalter-Glyphen), nie für lesbaren Inhalt |
+| Token        | Wert      | Kontrast | Verwendung                         |
+| ------------ | --------- | -------- | ---------------------------------- |
+| `ink`        | `#E9EDF3` | 16.5 : 1 | Headlines, Werte                   |
+| `ink-muted`  | `#A3ABB9` | 8.4 : 1  | **Fließtext** (Taste-Ziel ≥ 7 : 1) |
+| `ink-subtle` | `#8891A1` | 6.1 : 1  | nur Labels, Eyebrows, Captions     |
+| `ink-faint`  | `#4B5468` | –        | nur dekorativ                      |
 
 ### Akzente
 
-| Token                  | Wert            | Rolle                                                                               |
-| ---------------------- | --------------- | ----------------------------------------------------------------------------------- |
-| `accent` (Hauptakzent) | `#5CE1E6` Aqua  | Primär-CTA, Fokus-Ring, Links, aktive Navigation                                    |
-| `accent-hover`         | `#8AEDF0`       | Hover/Pressed-Aufhellung                                                            |
-| `on-accent`            | `#041417`       | Text auf Aqua (12.0 : 1)                                                            |
-| `accent-2` (Sekundär)  | `#FF8F70` Coral | Herausforderungen, Bestleistungen, „Gegner“-Seite im Vergleich, sparsame Highlights |
-| `on-accent-2`          | `#1A0904`       | Text auf Coral (8.7 : 1)                                                            |
+| Token       | Wert                | Rolle                                           |
+| ----------- | ------------------- | ----------------------------------------------- |
+| `accent`    | `#5AB9FC` Kornblume | Primär-Button, Fokus, aktive Elemente (9.1 : 1) |
+| `on-accent` | `#0A0D14`           | Text auf Akzent (9.1 : 1)                       |
+| `accent-2`  | `#FF8F70` Coral     | Herausforderungen, „Gegner“-Werte               |
 
-Regel: Pro Viewport höchstens **ein** gefüllter Aqua-Button. Coral nie als
-Flächenfarbe für große Bereiche, nur für Badges, Zahlen, Linien.
+### Segment-Spektrum (Signature + Logo)
 
-### Segment-Spektrum (Signature)
+`seg-1` `#5AB9FC` Sky · `seg-2` `#5CE1E6` Aqua · `seg-3` `#74E0A8` Mint ·
+`seg-4` `#F2C46D` Gold · `seg-5` `#FF8F70` Coral – alle ≥ 7 : 1 auf `surface-2`.
+Kein Violett. Bindestriche in `ink-subtle`.
 
-| Segment                    | Token   | Wert            |
-| -------------------------- | ------- | --------------- |
-| 1 (8 Zeichen, time_low)    | `seg-1` | `#7AB8FF` Sky   |
-| 2 (4, time_mid)            | `seg-2` | `#5CE1E6` Aqua  |
-| 3 (4, version + time_hi)   | `seg-3` | `#74E0A8` Mint  |
-| 4 (4, variant + clock_seq) | `seg-4` | `#F2C46D` Gold  |
-| 5 (12, node)               | `seg-5` | `#FF8F70` Coral |
-
-Alle Segmentfarben haben ≥ 8.9 : 1 auf `canvas` und ≥ 7.6 : 1 auf `surface-3` (nachgerechnet).
-Kein Violett/Lavendel im Seitendesign (Taste-Skill-Regel).
-Bindestriche werden in `ink-subtle` gesetzt. Für Fließtext-UUIDs (klein, z. B.
-in Listen) darf die Färbung entfallen (`plain`-Variante). Dann gilt `ink-muted`.
-
-Das Spektrum als Verlauf: `linear-gradient(90deg, seg-1, seg-2, seg-3, seg-4, seg-5)`.
-
-### Semantik
-
-| Token     | Wert      | Verwendung          |
-| --------- | --------- | ------------------- |
-| `success` | `#4ADE9A` | gültig, geschafft   |
-| `warning` | `#FFC857` | Frühstart, Hinweise |
-| `danger`  | `#FF6B7A` | ungültig, Fehler    |
-
-Semantische Farben erscheinen immer mit Icon oder Text, nie allein (Farbenblindheit).
+Semantik: `success #4ADE9A`, `warning #FFC857`, `danger #FF6B7A` – nie ohne Icon/Text.
 
 ## 3. Typografie
 
-Alle Fonts selbst gehostet (via `@fontsource`, im Build gebündelt, kein Drittserver).
+| Rolle                       | Familie                                                         |
+| --------------------------- | --------------------------------------------------------------- |
+| Sans (Display + Text)       | **Instrument Sans Variable** (wdth 96 %), Display 500, Text 400 |
+| Mono (UUIDs, Werte, Labels) | **DM Mono** 400/500                                             |
 
-| Rolle                          | Familie                     | Hinweis                                                                           |
-| ------------------------------ | --------------------------- | --------------------------------------------------------------------------------- |
-| Sans (Display + Text)          | **Geist Variable**          | 400 / 500 / 600                                                                   |
-| Mono (UUIDs, Zahlen, Eyebrows) | **JetBrains Mono Variable** | geschlossene, eindeutige Glyphen: `0` vs `O`, `1` vs `l`                          |
-| Serif-Akzent                   | **Instrument Serif Italic** | genau _ein_ emotionaler Satz pro Seite (z. B. „Es gibt sie nur dieses eine Mal.“) |
+| Token             | Größe                | Gewicht | Zeilenhöhe | Tracking |
+| ----------------- | -------------------- | ------- | ---------- | -------- |
+| `t-display` (h1)  | clamp 40 → 64px      | 500     | 1.02       | −0.036em |
+| Statement / Close | bis 128 / 88px       | 500     | 0.98–1.0   | −0.045em |
+| `t-h2`            | clamp 28 → 44px      | 500     | 1.08       | −0.028em |
+| `t-h3`            | 18px                 | 500     | 1.3        | −0.012em |
+| `t-lead`          | 17 → 20px            | 400     | 1.5        | 0        |
+| body              | 16px                 | 400     | 1.6        | 0        |
+| `eyebrow`         | 12px Mono, VERSALIEN | 400     | 1.4        | +0.12em  |
 
-### Skala (mobile → ≥768px)
+Regeln: Headlines nie über 500. h1 höchstens 3 Zeilen (Desktop). Kennzahlen nie größer als
+die h2. Große UUIDs füllen ihren Container exakt (`font-size = Breite / 21,6`, da 36 Zeichen
+à 0,6em), immer einzeilig. „Session‑UUID“ mit geschütztem Bindestrich.
 
-| Token       | Mobile                                | Desktop | Gewicht             | Zeilenhöhe | Tracking |
-| ----------- | ------------------------------------- | ------- | ------------------- | ---------- | -------- |
-| `display`   | 40px                                  | 72px    | 600                 | 1.05       | -0.035em |
-| `h1`        | 32px                                  | 48px    | 600                 | 1.1        | -0.03em  |
-| `h2`        | 24px                                  | 32px    | 600                 | 1.2        | -0.02em  |
-| `h3`        | 18px                                  | 20px    | 500                 | 1.3        | -0.01em  |
-| `body-lg`   | 17px                                  | 18px    | 400                 | 1.6        | 0        |
-| `body`      | 16px                                  | 16px    | 400                 | 1.6        | 0        |
-| `small`     | 14px                                  | 14px    | 400                 | 1.5        | 0        |
-| `eyebrow`   | 12px                                  | 12px    | 500 Mono, VERSALIEN | 1.4        | +0.14em  |
-| `uuid-hero` | fluid `clamp(1.05rem, 4.6vw, 2.6rem)` |         | 500 Mono            | 1.25       | -0.01em  |
-| `uuid`      | 15px                                  | 16px    | 450 Mono            | 1.5        | 0        |
+## 4. Raster & Spacing
 
-Regeln:
-
-- Zahlen in Scores/Timern: Mono + `font-variant-numeric: tabular-nums`.
-- Fließtext max. 68ch breit.
-- Headlines nie über 600 Gewicht.
-- Der Hero-UUID muss bei 360px Breite in **eine** Zeile passen (36 Zeichen). Daher
-  die fluide Größe. Darunter umbrechen nur an Bindestrichen.
-
-## 4. Spacing
-
-4px-Basis. Tokens (Tailwind-Standard-Skala wird genutzt, diese Stufen sind erlaubt):
-
-`1`=4 · `2`=8 · `3`=12 · `4`=16 · `6`=24 · `8`=32 · `12`=48 · `16`=64 · `24`=96 · `32`=128
-
-- Seiten-Gutter: 16px mobil (+ `env(safe-area-inset-*)`), 24px ab 768px, 32px ab 1280px.
-- `.wrap`: `min(100% − 2 × Gutter, 1280px)`; Gutter 24px (mobil) · 48px (≥ 1024) · 80px (≥ 1280). Leseinhalte max. 68ch.
-- 12-Spalten-Raster mit 24px Gap; Splits immer 7/5 auf derselben Linie.
-- Sektionsabstand: 64px mobil, 96px Desktop.
-- Karteninnenabstand: 20px mobil, 24px Desktop.
+- `.wrap` = `min(100% − 2 × --gut, 1280px)`; `--gut` 24 → 48 (≥ 1024) → 80px (≥ 1280).
+- 12 Spalten, `--gutter` 24px (12px unter 640). Splits: Text 5 Spalten, Visual ab Spalte 7.
+- Showcase-Sektionen `.screen`: ab 1024px genau `--h × 100svh`; darunter wachsen sie mit
+  dem Inhalt (mind. `--hm × 100lvh`).
+- 4px-Basis; Karteninnenabstand 16–24px.
 
 ## 5. Radien
 
-| Token    | Wert   | Verwendung                        |
-| -------- | ------ | --------------------------------- |
-| `r-sm`   | 6px    | Chips, Keycaps, kleine Tags       |
-| `r-md`   | 10px   | Buttons, Inputs, Segment-Controls |
-| `r-lg`   | 16px   | Karten, Panels                    |
-| `r-xl`   | 24px   | Hero-Panel, Spielfläche           |
-| `r-full` | 9999px | Pills, Status-Badges, Avatare     |
+`sm 4` · `md 6` · `lg 10` · `xl 14` · Buttons, Chips, Tabs: Pill (`9999px`).
 
-Buttons sind **nicht** pillenförmig (Linear-Prinzip), nur Badges/Chips.
+## 6. Tiefe
 
-## 6. Tiefe, Glows, Verläufe
-
-Tiefe entsteht über **Surface-Leiter + Hairline**, nicht über schwarze Schatten.
-
-| Stufe | Behandlung                                                                                                            |
-| ----- | --------------------------------------------------------------------------------------------------------------------- |
-| 0     | flach auf `canvas`                                                                                                    |
-| 1     | `surface-1` + 1px `hairline` + 1px Innenlicht oben (`inset 0 1px 0 rgb(255 255 255 / .04)`)                           |
-| 2     | `surface-2` + `hairline-strong` (Hover/aktiv)                                                                         |
-| Glow  | `0 0 0 1px rgb(92 225 230 / .25), 0 8px 40px -8px rgb(92 225 230 / .35)` – nur Primär-CTA (Hover) & aktives Spielfeld |
-
-Atmosphäre:
-
-- **Hero-Aura:** vorgerendertes WebP (`public/aura.webp`, 5 KB, `scripts/gen-assets.mjs`) als
-  `<img>`-Hintergrundebene des Heros, unterhalb des Headers; atmet nur über die Deckkraft.
-- **Spektrum-Hairline:** 1px Verlauf unter dem Header (Opacity 0.5).
-- **Hintergrund-UUIDs:** die Session-UUID als riesige Mono-Glyphen in `ink-faint`
-  bei Opacity ≤ 0.05 im Footer. Rein dekorativ, `aria-hidden`.
+Surface-Leiter + 1px Hairlines. Schatten nur für schwebende Ebenen (Inspector-Fenster,
+Validator-Karte), weich und dunkel. Der Hero-Rahmen trägt als „lit ground“ das vorgerenderte
+Verlaufsbild `public/aura.webp` (5 KB). Keine Grain-Ebene, keine weiteren Verläufe.
 
 ## 7. Motion
 
-- **Dauer:** 120ms (Micro: Press, Toggle) · 200ms (Standard: Hover, Fade) ·
-  360ms (Enter: Panels, Ergebnis) · 900–1400ms nur für die Hero-UUID-Entschlüsselung.
-- **Easing:** `--ease-out: cubic-bezier(.22,1,.36,1)` für Eintritte,
-  `--ease-in-out: cubic-bezier(.65,0,.35,1)` für Zustandswechsel.
-- **Signature-Animation „Decrypt“:** Die UUID erscheint Zeichen für Zeichen von
-  links, jedes Zeichen flackert 2–4 Mal durch zufällige Hex-Glyphen, bevor es
-  einrastet. Gestaffelt pro Segment. Layout bleibt stabil (feste Breite, Mono).
-- **Press:** `scale(.97)` + Surface-Stufe hoch. Kein Hover-only-Feedback.
-- **Copy-Feedback:** Icon morpht zu Haken, Label „Kopiert“ für 1.6s, plus
-  `aria-live`-Ansage.
-- Nur `transform` und `opacity` animieren.
-- **`prefers-reduced-motion: reduce`:** Decrypt entfällt (UUID erscheint sofort,
-  kurzer Fade 120ms), Aura statisch, keine Skalierungen; Spiel-Animationen werden
-  zu Farb-/Opacity-Wechseln.
+- 160–200ms für Hover/Press, 640ms für die Hero-Entrance (`data-enter` + `html.m-enter`).
+- Buttons heben sich beim Hover 1px, drücken auf `scale(.97)`; verlinkte Karten heben sich 2px.
+- **Decrypt** der Session-UUID im Inspector; die Bit-Matrix blendet ihre Bits um.
+- **Validator-Loop:** fertig → 1,2 s halten → Schritte 0,5 s versetzt (Zyklus ≈ 3,5 s),
+  Pause-Knopf, Neustart beim Überfahren.
+- Momente aus dem Kit (`public/assets/moments/`, unverändert): `counter-rolls`, `marquee-row`.
+- `prefers-reduced-motion`: alles steht in seinem Endzustand.
 
-## 8. Komponenten-Regeln
+## 8. Komponenten
 
-### UuidDisplay (Signature)
-
-- Mono, Segmentfarben `seg-1…5`, Bindestriche `ink-faint`.
-- **Anatomie-Leiste** (Hero): unter jedem Segment ein 2px-Balken in Segmentfarbe, exakt in `ch` ausgerichtet; ab 640px mit Feldnamen (TIME_LOW · TIME_MID · VER·HI · VAR·SEQ · NODE).
-- Große UUIDs (`.uuid-xl`) skalieren mit der verfügbaren Breite und bleiben immer einzeilig.
-- Varianten: `hero` (groß, Decrypt), `default`, `plain` (ungefärbt), `compact`
-  (nur erste 8 Zeichen + „…“).
-- Immer selektierbar (`user-select: all` bei Klick auf `hero`), `translate="no"`,
-  `spellcheck="false"`.
-- Screenreader: die UUID als Ganzes in `aria-label`, damit sie nicht Segment für
-  Segment zerstückelt vorgelesen wird.
-
-### Buttons
-
-| Variante    | Look                                                           |
-| ----------- | -------------------------------------------------------------- |
-| `primary`   | `accent`-Fläche, `on-accent`-Text, 500, `r-md`, Glow bei Hover |
-| `secondary` | `surface-2`, `ink`, 1px `hairline-strong`                      |
-| `ghost`     | transparent, `ink-muted` → `ink`                               |
-| `icon`      | 44×44, `r-md`, `ghost`-Stil, immer mit `aria-label`            |
-
-- Mindesthöhe **44px** (mobil 48px für Primär-CTAs).
-- Label 15px/500. Icon 18px, Abstand 8px.
-- Disabled: Opacity .45, `cursor: not-allowed`, kein Glow.
-
-### Focus
-
-- Global `:focus-visible`: 2px `accent`-Outline, 2px Offset, `r-md`. Nie entfernen.
-
-### Karten / Tiles
-
-- `surface-1`, `hairline`, `r-lg`, Innenlicht oben.
-- Interaktive Tiles: ganze Karte ist der Link; bei Hover/Focus Border →
-  `hairline-strong` und eine 1px-Spektrum-Linie oben blendet ein.
-- Jede Tile hat ein Mono-Eyebrow (z. B. `TOOL / 01`) und einen kleinen
-  generativen Glyph.
-
-### Inputs
-
-- `surface-2`, 1px `hairline-strong`, `r-md`, Höhe 48px, 16px Schrift (verhindert
-  iOS-Zoom). Fokus: Border `accent` + Fokus-Ring.
-- UUID-Inputs in Mono. Fehler: Border `danger` + Text darunter mit Icon.
-
-### Segment-Control / Tabs
-
-- Container `surface-1` + `hairline`, `r-md`, Padding 4px; aktive Option
-  `surface-3` + `ink`. Horizontal scrollbar **nur innerhalb** des Controls, nie die
-  Seite.
-
-### Badges
-
-- `r-full`, 12px Mono-Versalien, `surface-2`. Varianten: `accent` (Aqua-Text auf
-  Aqua 12 %), `accent-2` (Coral), `success`/`danger`.
-
-### Toast
-
-- unten mittig über der Bottom-Bar, `surface-3`, `hairline-strong`, 360ms Enter,
-  `role="status"`.
-
-### Navigation
-
-- **Mobil (< 768px):** fixierte **Bottom-Bar** mit 4 Zielen (Start, Tools,
-  Spiele, Über), Icon + Label, je ≥ 56px hoch, `padding-bottom:
-env(safe-area-inset-bottom)`, `surface-1` mit 80 % Deckkraft + Backdrop-Blur,
-  Hairline oben. Aktiver Punkt: Aqua-Icon + kleiner Spektrum-Strich.
-- **Desktop:** Top-Bar 64px, Wordmark links, Links rechts, Spektrum-Hairline unten.
-- Skip-Link „Zum Inhalt springen“ als erstes fokussierbares Element.
-
-### Game-Shell
-
-- Spielfläche `surface-1`, `r-xl`, max. 560px breit, zentriert.
-- Kopfzeile: Spielname, Runden-UUID (`compact`, antippbar → voll), Timer (Mono).
-- Ergebniskarte: großer Score in Mono, darunter Kennzahlen als 2–3-Spalten-Raster;
-  Herausforderer-Werte in Coral, eigene in Aqua.
+- **UUID-Darstellung:** Mono, Segmentfarben, `translate="no"`, `aria-label` mit der ganzen UUID.
+- **Buttons:** `primary` (Akzent-Pill), `secondary` (Outline-Pill), `ghost`; Höhe ≥ 44px
+  (CTAs 48px). Genau ein primärer Button pro Bildschirm.
+- **Karten:** `surface-1`, Hairline, `r-lg`. Tool-Karten: oben ein UI-Fragment auf `canvas`
+  (`data-ui`), unten Titel + Satz, Pfeil wandert beim Hover.
+- **Inspector-Fenster:** Titelleiste mit Punkten, Seitenleiste (nur Desktop), Hauptbereich
+  mit UUID, Anatomie-Balken, 32×4-Bit-Matrix (Version- und Varianten-Nibble umrandet) und
+  Wertezeilen; rechts und unten vom Rahmen angeschnitten.
+- **Chips/Badges:** Pill, 12px Mono; Varianten `accent`, `ok`, `accent-2`.
+- **Navigation:** Desktop „nav-centre“ (Wordmark links, Links mittig, Outline-Pill rechts);
+  mobil Bottom-Bar mit Safe-Area.
+- **Footer:** Schluss-Bildschirm aus Close (große Type + zwei Buttons) und dunklem Footer
+  mit der Session-UUID als Geisterschrift.
 
 ## 9. Barrierefreiheit (verbindlich)
 
-- WCAG AA: Text ≥ 4.5 : 1, große Schrift/UI ≥ 3 : 1. `ink-faint` nie für Inhalt.
-- Alles per Tastatur bedienbar, sichtbarer Fokus, logische Reihenfolge.
-- Touch-Targets ≥ 44×44px, Abstand ≥ 8px.
-- Nichts hängt von Hover ab.
-- `aria-live="polite"` für Copy, Ergebnisse, Spielstatus.
-- Sprache `lang="de"`; UUIDs mit `translate="no"`.
+WCAG AA (Fließtext ≥ 7 : 1), Tastaturbedienung, sichtbarer Fokus (2px Akzent), Touch-Targets
+≥ 44px, nichts hängt von Hover ab, `aria-live` für Copy und neue UUID, `lang="de"`.
 
 ## 10. Copy-Ton
 
-Du-Form, knapp, warm, mit einem Augenzwinkern. Keine Marketing-Floskeln.
-Technische Begriffe korrekt (Version, Variante, Namespace), aber erklärt.
-Beispiel: „Das ist deine Session-UUID. Es gibt sie nur dieses eine Mal.“
+Du-Form, knapp, warm, präzise. Überschriften nennen Dinge, Buttons sind Verb + Objekt.
 
-## 11. Taste-Skill (Hybrid)
+## 11. Taste Skill (Hybrid)
 
-Der installierte Taste Skill (`design-taste-frontend`) bestimmt die **Showcase-Seiten**
-(Home, Spiele-Übersicht, About). Tool- und Spielseiten sind App-UI und folgen nur seinen
-Qualitäts-Checks (Kontrast, Fokus, Tap-Größen, Kanten).
-
-- Kind `software`; `<html data-type="software">` und die Metas `page-type`/`site-kind` im Layout.
-- Header `header.nav` ist fixiert. Showcase-Sektionen sind `.screen` = genau `--h × 100svh`
-  (mobil mindestens `100lvh`); der Hero füllt den ersten Bildschirm allein.
-- Close und Footer sind zusammen ein Bildschirm (`footer.closing`, Prop `showcase` am Layout).
-- Hero-Entrance über `data-enter` + `html.m-enter` (ohne JS steht alles sofort).
-- Ein gedealter Moment pro Seite (Home: `letters-assemble`), unverändert aus dem Kit in
-  `public/assets/moments/` (nie editieren, nicht formatieren).
-- Visuals und Mocks tragen `data-ui`; Überschriften nennen Dinge, Buttons = Verb + Objekt,
-  höchstens ein Eyebrow pro Bereich.
-- Prüfen mit `consistency.mjs` auf dem Build in `dist/` (Befehl in der README) – Ziel: 0 FAIL.
+Showcase-Seiten (Home, Spiele-Übersicht, About) folgen dem Skill; Tool- und Spielseiten sind
+App-UI und folgen nur seinen Qualitäts-Checks. Prüfen: siehe README (`gate.mjs`, Ziel PASS).
+Freigestellt (`.taste-skill/waivers.json`): `row-lines` für den `marquee-row`-Moment – die Zeile
+blendet an den Rändern bewusst aus.

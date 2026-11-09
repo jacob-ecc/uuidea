@@ -11,14 +11,10 @@ const font = async (pkg, file) =>
   (await readFile(new URL(`${pkg}/files/${file}`, fontDir))).toString('base64');
 
 const svg = await readFile(pub('favicon.svg'), 'utf8');
-const geist = await font('geist', 'geist-latin-wght-normal.woff2');
-const mono = await font('jetbrains-mono', 'jetbrains-mono-latin-wght-normal.woff2');
-const serif = (
+const geist = await font('instrument-sans', 'instrument-sans-latin-wdth-normal.woff2');
+const mono = (
   await readFile(
-    new URL(
-      'node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2',
-      root,
-    ),
+    new URL('node_modules/@fontsource/dm-mono/files/dm-mono-latin-500-normal.woff2', root),
   )
 ).toString('base64');
 
@@ -35,7 +31,7 @@ async function shot(html, w, h, out) {
 }
 
 const iconHtml = (size, pad = 0) =>
-  `<html><body style="margin:0;background:#07080c;display:grid;place-items:center;width:${size}px;height:${size}px">
+  `<html><body style="margin:0;background:#0a0d14;display:grid;place-items:center;width:${size}px;height:${size}px">
    <div style="width:${size - pad * 2}px;height:${size - pad * 2}px">${svg.replace('<svg ', '<svg width="100%" height="100%" ')}</div></body></html>`;
 
 await shot(iconHtml(180), 180, 180, 'apple-touch-icon.png');
@@ -59,7 +55,7 @@ await writeFile(pub('favicon.ico'), Buffer.concat([header, png32]));
 
 // Open-Graph-Bilder
 const seg = (u) => {
-  const c = ['#7ab8ff', '#5ce1e6', '#74e0a8', '#f2c46d', '#ff8f70'];
+  const c = ['#5ab9fc', '#5ce1e6', '#74e0a8', '#f2c46d', '#ff8f70'];
   return u
     .split('-')
     .map((s, i) => `<span style="color:${c[i]}">${s}</span>`)
@@ -68,16 +64,15 @@ const seg = (u) => {
 const og = ({ eyebrow, title, serif: s, uuid }) => `<!doctype html><html><head><style>
 @font-face{font-family:G;src:url(data:font/woff2;base64,${geist})}
 @font-face{font-family:M;src:url(data:font/woff2;base64,${mono})}
-@font-face{font-family:S;font-style:italic;src:url(data:font/woff2;base64,${serif})}
-body{margin:0;width:1200px;height:630px;background:#07080c;color:#f2f4f8;font-family:G;overflow:hidden;position:relative}
+body{margin:0;width:1200px;height:630px;background:#0a0d14;color:#f2f4f8;font-family:G;overflow:hidden;position:relative}
 .aura{position:absolute;inset:-30% -20% auto -20%;height:130%;filter:blur(90px);opacity:.28;
-background:radial-gradient(35% 35% at 25% 45%,#7ab8ff,transparent 70%),radial-gradient(30% 30% at 55% 30%,#74e0a8,transparent 70%),radial-gradient(32% 32% at 80% 60%,#ff8f70,transparent 70%)}
+background:radial-gradient(35% 35% at 25% 45%,#5ab9fc,transparent 70%),radial-gradient(30% 30% at 55% 30%,#74e0a8,transparent 70%),radial-gradient(32% 32% at 80% 60%,#ff8f70,transparent 70%)}
 .wrap{position:relative;padding:72px 80px;height:100%;box-sizing:border-box;display:flex;flex-direction:column}
 .eb{font-family:M;font-size:20px;letter-spacing:.14em;text-transform:uppercase;color:#8a93a3}
 .u{font-family:M;font-size:47px;font-weight:500;margin-top:auto;white-space:nowrap;letter-spacing:-.01em}
-h1{font-size:68px;line-height:1.05;letter-spacing:-.035em;font-weight:600;margin:28px 0 0;max-width:18ch}
-.s{font-family:S;font-style:italic;font-weight:400;letter-spacing:0}
-.line{height:2px;background:linear-gradient(90deg,#7ab8ff,#5ce1e6,#74e0a8,#f2c46d,#ff8f70);margin-top:28px;opacity:.7}
+h1{font-size:72px;line-height:1.02;letter-spacing:-.036em;font-weight:500;margin:28px 0 0;max-width:18ch}
+.s{color:#a3abb9}
+.line{height:2px;background:linear-gradient(90deg,#5ab9fc,#5ce1e6,#74e0a8,#f2c46d,#ff8f70);margin-top:28px;opacity:.7}
 .brand{position:absolute;top:72px;right:80px;font-size:26px;font-weight:600;letter-spacing:-.02em}
 </style></head><body><div class="aura"></div><div class="wrap">
 <div class="eb">${eyebrow}</div><div class="brand">uuidea.de</div>
@@ -118,7 +113,7 @@ await page.setContent('<canvas id=c width=1440 height=810></canvas>');
 const aura = await page.evaluate(() => {
   const c = document.getElementById('c');
   const x = c.getContext('2d');
-  x.fillStyle = '#07080c';
+  x.fillStyle = '#0a0d14';
   x.fillRect(0, 0, 1440, 810);
   x.scale(7.5, 7.5);
   x.filter = 'blur(105px)';
@@ -129,7 +124,7 @@ const aura = await page.evaluate(() => {
     x.fillStyle = g;
     x.fillRect(0, 0, 192, 108);
   };
-  blob(40, 40, 70, '#7ab8ff', '55');
+  blob(40, 40, 70, '#5ab9fc', '55');
   blob(105, 25, 55, '#74e0a8', '38');
   blob(160, 70, 70, '#ff8f70', '48');
   return c.toDataURL('image/webp', 0.75);

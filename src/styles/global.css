@@ -1,30 +1,34 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/geist';
-@import '@fontsource-variable/jetbrains-mono';
-@import '@fontsource/instrument-serif/400-italic.css';
+@import '@fontsource-variable/instrument-sans/wdth.css';
+@import '@fontsource/dm-mono/400.css';
+@import '@fontsource/dm-mono/500.css';
 
-/* Tokens – siehe DESIGN.md */
+/*
+  Tokens – siehe DESIGN.md.
+  Taste-Deal: palette blue-black-cornflower · type instrument (Instrument Sans + DM Mono) · radius sharp
+*/
 @theme {
-  --color-canvas: #07080c;
-  --color-surface-1: #0d0f15;
-  --color-surface-2: #12151d;
-  --color-surface-3: #181c26;
-  --color-hairline: #222733;
-  --color-hairline-strong: #2e3442;
+  --color-canvas: #0a0d14;
+  --color-band: #0e121c;
+  --color-surface-1: #131824;
+  --color-surface-2: #1a2030;
+  --color-surface-3: #212839;
+  --color-hairline: #222a3a;
+  --color-hairline-strong: #313a4e;
 
-  --color-ink: #f2f4f8;
-  --color-ink-muted: #b8bfcc;
-  --color-ink-subtle: #8a93a3;
-  --color-ink-faint: #5b6373;
+  --color-ink: #e9edf3;
+  --color-ink-muted: #a3abb9;
+  --color-ink-subtle: #8891a1;
+  --color-ink-faint: #4b5468;
 
-  --color-accent: #5ce1e6;
-  --color-accent-hover: #8aedf0;
-  --color-on-accent: #041417;
+  --color-accent: #5ab9fc;
+  --color-accent-hover: #8ccdfd;
+  --color-on-accent: #0a0d14;
   --color-accent-2: #ff8f70;
   --color-on-accent-2: #1a0904;
 
-  /* Segment-Spektrum: Sky → Aqua → Mint → Gold → Coral (kein Violett) */
-  --color-seg-1: #7ab8ff;
+  /* Segment-Spektrum (Logo): Sky → Aqua → Mint → Gold → Coral */
+  --color-seg-1: #5ab9fc;
   --color-seg-2: #5ce1e6;
   --color-seg-3: #74e0a8;
   --color-seg-4: #f2c46d;
@@ -34,14 +38,13 @@
   --color-warning: #ffc857;
   --color-danger: #ff6b7a;
 
-  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
-  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-sans: 'Instrument Sans Variable', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
@@ -64,6 +67,15 @@
     /* --gut = Seitenrand, --gutter = Spaltenabstand im 12er-Raster (Kit-Konvention) */
     --gutter: 12px;
     --gut: max(24px, env(safe-area-inset-left), env(safe-area-inset-right));
+    /* Kit-Aliase für die Taste-Momente (public/assets/moments) */
+    --font-display: var(--font-sans);
+    --display-weight: 500;
+    --ink: var(--color-ink);
+    --muted: var(--color-ink-muted);
+    --s-3: 12px;
+    --s-4: 16px;
+    --s-6: 24px;
+    --t-lead: 18px;
   }
   @media (min-width: 640px) {
     :root {
@@ -92,6 +104,7 @@
     background: var(--color-canvas);
     color: var(--color-ink-muted);
     font-family: var(--font-sans);
+    font-stretch: 96%;
     font-size: 16px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
@@ -103,7 +116,7 @@
   h3,
   h4 {
     color: var(--color-ink);
-    font-weight: 600;
+    font-weight: 500;
     text-wrap: balance;
   }
   p {
@@ -115,8 +128,8 @@
   }
   :focus-visible {
     outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
-    border-radius: var(--radius-md);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
   }
   a {
     color: inherit;
@@ -130,12 +143,18 @@
 }
 
 @layer components {
-  /* Inhaltskante = Box-Kante (keine Innenabstände), damit alle Blöcke auf zwei Linien liegen */
+  /* Inhaltskante = Box-Kante, 1280px, Ränder aus --gut */
   .wrap {
     width: min(100% - 2 * var(--gut), 1280px);
     margin-inline: auto;
   }
-  /* Showcase-Sektionen: genau ein Bildschirm (wächst mobil mit dem Inhalt) */
+  .grid-12 {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+  }
+
+  /* Showcase-Sektionen: genau --h Bildschirme (mobil mind. --hm × lvh) */
   .screen {
     position: relative;
     box-sizing: border-box;
@@ -143,66 +162,68 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: calc(var(--nav-h) + 32px) 0 48px;
+    padding: calc(var(--nav-h) + 40px) 0 72px;
   }
   .screen > .wrap {
     position: relative;
     z-index: 1;
   }
-  @media (max-width: 639px) {
+  /* Unter 1024px stapelt sich der Inhalt: Sektion wächst mit (mind. --hm Bildschirme) */
+  @media (max-width: 1023px) {
     .screen {
       height: auto;
       min-height: calc(var(--hm, 1) * 100lvh);
-      padding: calc(var(--nav-h) + 24px) 0 calc(40px + var(--bottom-h));
     }
   }
-  /* Kit-Aliase für den Taste-Moment (assets/moments) */
-  :root {
-    --font-display: var(--font-sans);
-    --display-weight: 600;
-    --ink: var(--color-ink);
-    --muted: var(--color-ink-muted);
-    --s-6: 24px;
-    --t-lead: 18px;
+  @media (max-width: 639px) {
+    .screen {
+      padding: calc(var(--nav-h) + 28px) 0 calc(40px + var(--bottom-h));
+    }
   }
+  .band {
+    background: var(--color-band);
+    border-block: 1px solid var(--color-hairline);
+  }
+
+  /* Typo */
   .eyebrow {
     font-family: var(--font-mono);
     font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
+    font-weight: 400;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--color-ink-subtle);
     line-height: 1.4;
   }
   .t-display {
-    font-size: clamp(2.5rem, 1.6rem + 4.4vw, 4.5rem);
-    line-height: 1.05;
-    letter-spacing: -0.035em;
+    font-size: clamp(2.5rem, 1.5rem + 3.6vw, 4rem);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.036em;
   }
   .t-h1 {
-    font-size: clamp(2rem, 1.6rem + 2vw, 3rem);
-    line-height: 1.1;
+    font-size: clamp(2rem, 1.5rem + 2.2vw, 3rem);
+    line-height: 1.06;
     letter-spacing: -0.03em;
   }
   .t-h2 {
-    font-size: clamp(1.5rem, 1.3rem + 1vw, 2rem);
-    line-height: 1.2;
-    letter-spacing: -0.02em;
+    font-size: clamp(1.75rem, 1.3rem + 1.8vw, 2.75rem);
+    line-height: 1.08;
+    letter-spacing: -0.028em;
   }
   .t-h3 {
-    font-size: clamp(1.125rem, 1.08rem + 0.2vw, 1.25rem);
+    font-size: 1.125rem;
     line-height: 1.3;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.012em;
     font-weight: 500;
   }
-  .t-serif {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-weight: 400;
-    letter-spacing: 0;
+  .t-lead {
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+    line-height: 1.5;
+    color: var(--color-ink-muted);
   }
   .prose-w {
-    max-width: 68ch;
+    max-width: 62ch;
   }
   .tabular {
     font-variant-numeric: tabular-nums;
@@ -213,18 +234,17 @@
     background: var(--color-surface-1);
     border: 1px solid var(--color-hairline);
     border-radius: var(--radius-lg);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
   }
 
-  /* Buttons */
+  /* Buttons: Pill (Taste-Deal), Hover hebt an, Press drückt */
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
     min-height: 44px;
-    padding: 0 18px;
-    border-radius: var(--radius-md);
+    padding: 0 20px;
+    border-radius: 9999px;
     font-size: 15px;
     font-weight: 500;
     line-height: 1;
@@ -233,19 +253,20 @@
     text-decoration: none;
     user-select: none;
     transition:
-      transform 120ms var(--ease-out),
+      transform 160ms var(--ease-out),
       background-color 200ms var(--ease-out),
       border-color 200ms var(--ease-out),
-      box-shadow 200ms var(--ease-out),
       color 200ms var(--ease-out);
   }
-  .btn:active {
-    transform: scale(0.97);
+  .btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+  .btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.97);
   }
   .btn:disabled {
     opacity: 0.45;
     cursor: not-allowed;
-    transform: none;
   }
   .btn-primary {
     background: var(--color-accent);
@@ -253,18 +274,15 @@
   }
   .btn-primary:hover:not(:disabled) {
     background: var(--color-accent-hover);
-    box-shadow:
-      0 0 0 1px rgb(92 225 230 / 0.25),
-      0 8px 40px -8px rgb(92 225 230 / 0.35);
   }
   .btn-secondary {
-    background: var(--color-surface-2);
+    background: transparent;
     color: var(--color-ink);
     border-color: var(--color-hairline-strong);
   }
   .btn-secondary:hover:not(:disabled) {
-    background: var(--color-surface-3);
-    border-color: #3a4152;
+    background: var(--color-surface-1);
+    border-color: #48536b;
   }
   .btn-ghost {
     background: transparent;
@@ -272,11 +290,11 @@
   }
   .btn-ghost:hover:not(:disabled) {
     color: var(--color-ink);
-    background: var(--color-surface-2);
+    background: var(--color-surface-1);
   }
   .btn-lg {
     min-height: 48px;
-    padding: 0 22px;
+    padding: 0 24px;
   }
   .btn-icon {
     width: 44px;
@@ -288,7 +306,7 @@
     width: 100%;
     min-height: 48px;
     padding: 0 14px;
-    background: var(--color-surface-2);
+    background: var(--color-surface-1);
     border: 1px solid var(--color-hairline-strong);
     border-radius: var(--radius-md);
     color: var(--color-ink);
@@ -305,7 +323,7 @@
     border-color: var(--color-danger);
   }
 
-  /* Badges */
+  /* Chips */
   .badge {
     display: inline-flex;
     align-items: center;
@@ -313,29 +331,32 @@
     height: 24px;
     padding: 0 10px;
     border-radius: 9999px;
-    background: var(--color-surface-2);
-    border: 1px solid var(--color-hairline);
+    border: 1px solid var(--color-hairline-strong);
     font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-ink-subtle);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--color-ink-muted);
   }
   .badge-accent {
     color: var(--color-accent);
-    background: color-mix(in oklab, var(--color-accent) 12%, transparent);
-    border-color: color-mix(in oklab, var(--color-accent) 25%, transparent);
+    border-color: color-mix(in oklab, var(--color-accent) 35%, transparent);
+    background: color-mix(in oklab, var(--color-accent) 10%, transparent);
+  }
+  .badge-ok {
+    color: var(--color-success);
+    border-color: color-mix(in oklab, var(--color-success) 35%, transparent);
+    background: color-mix(in oklab, var(--color-success) 10%, transparent);
   }
   .badge-accent-2 {
     color: var(--color-accent-2);
-    background: color-mix(in oklab, var(--color-accent-2) 12%, transparent);
-    border-color: color-mix(in oklab, var(--color-accent-2) 25%, transparent);
+    border-color: color-mix(in oklab, var(--color-accent-2) 35%, transparent);
+    background: color-mix(in oklab, var(--color-accent-2) 10%, transparent);
   }
 
   /* UUID-Signature */
   .uuid {
     font-family: var(--font-mono);
-    font-weight: 450;
+    font-weight: 400;
     font-variant-ligatures: none;
     font-variant-numeric: tabular-nums slashed-zero;
     word-break: break-all;
@@ -358,13 +379,11 @@
   .uuid .dash {
     color: var(--color-ink-subtle);
   }
-  /* Große UUID: passt immer in eine Zeile (36 Zeichen à 0,6em ≈ 21,6em) */
+  /* Große UUID: 36 Zeichen à 0,6em = 21,6em → füllt die .wrap exakt, immer einzeilig */
   .uuid-xl {
     font-family: var(--font-mono);
-    /* 36 Zeichen à 0,6em = 21,6em → füllt die .wrap exakt */
     font-size: calc(min(100vw - 2 * var(--gut), 1280px) / 21.6);
-    font-weight: 500;
-    line-height: 1.25;
+    line-height: 1.2;
     letter-spacing: 0;
     white-space: nowrap;
   }
@@ -388,7 +407,7 @@
     padding: 4px;
     background: var(--color-surface-1);
     border: 1px solid var(--color-hairline);
-    border-radius: var(--radius-md);
+    border-radius: 9999px;
     overflow-x: auto;
     scrollbar-width: none;
   }
@@ -397,7 +416,7 @@
     flex: 1 0 auto;
     min-height: 40px;
     padding: 0 14px;
-    border-radius: 7px;
+    border-radius: 9999px;
     font-size: 14px;
     font-weight: 500;
     color: var(--color-ink-subtle);
@@ -414,55 +433,73 @@
     background: var(--color-surface-3);
     color: var(--color-ink);
   }
-}
 
-/* Atmosphäre */
-
-/* Hero-Aura: vorgerendertes, weiches Verlaufsbild (scripts/gen-assets.mjs), Hintergrundebene des Heros */
-.aura {
-  position: absolute;
-  top: calc(var(--nav-h) + env(safe-area-inset-top));
-  left: 0;
-  width: 100%;
-  height: calc(100% - var(--nav-h) - env(safe-area-inset-top));
-  object-fit: cover;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.5;
-  animation: aura-breathe 12s var(--ease-in-out) infinite alternate;
-}
-@keyframes aura-breathe {
-  to {
-    opacity: 0.32;
+  /* Pause-Knopf der Taste-Loops (marquee-row u. a.) */
+  .loop-pause {
+    position: absolute;
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 9999px;
+    border: 1px solid var(--color-hairline-strong);
+    background: var(--color-surface-1);
+    color: var(--color-ink-muted);
+    z-index: 2;
+  }
+  .loop-pause:hover {
+    color: var(--color-ink);
+  }
+  .loop-pause svg {
+    width: 12px;
+    height: 12px;
+    fill: currentColor;
   }
 }
 
+/* Hero-Entrance: nur wenn JS läuft (html.m-enter), sonst steht alles sofort */
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
     transform: none;
   }
 }
-/* Hero-Entrance: nur wenn JS läuft (html.m-enter), sonst steht alles sofort */
 .m-enter [data-enter] .enter,
 .m-enter .enter-page .enter {
-  animation: fade-up 520ms var(--ease-out) both;
+  animation: fade-up 640ms var(--ease-out) both;
 }
 .m-enter [data-enter] .enter:nth-child(2) {
-  animation-delay: 60ms;
+  animation-delay: 70ms;
 }
 .m-enter [data-enter] .enter:nth-child(3) {
-  animation-delay: 120ms;
+  animation-delay: 140ms;
 }
 .m-enter [data-enter] .enter:nth-child(4) {
-  animation-delay: 180ms;
+  animation-delay: 210ms;
 }
 .m-enter [data-enter] .enter:nth-child(n + 5) {
-  animation-delay: 240ms;
+  animation-delay: 280ms;
+}
+
+.skip-link {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  z-index: 100;
+  padding: 12px 16px;
+  border-radius: 9999px;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: 500;
+  transform: translateY(-200%);
+  transition: transform 200ms var(--ease-out);
+}
+.skip-link:focus {
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -474,27 +511,8 @@
     transition-duration: 1ms !important;
     scroll-behavior: auto !important;
   }
-  .aura {
-    animation: none;
-  }
-  .btn:active {
+  .btn:hover:not(:disabled),
+  .btn:active:not(:disabled) {
     transform: none;
   }
-}
-
-.skip-link {
-  position: absolute;
-  left: 0;
-  top: 10px;
-  z-index: 100;
-  padding: 12px 16px;
-  border-radius: var(--radius-md);
-  background: var(--color-accent);
-  color: var(--color-on-accent);
-  font-weight: 500;
-  transform: translateY(-200%);
-  transition: transform 200ms var(--ease-out);
-}
-.skip-link:focus {
-  transform: none;
 }

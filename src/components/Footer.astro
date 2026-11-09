@@ -26,7 +26,7 @@ const { closing = false } = Astro.props;
               …
             </span>
           </p>
-          <p class="t-serif text-xl text-ink">{t.footer.tagline}</p>
+          <p class="text-lg tracking-tight text-ink">{t.footer.tagline}</p>
         </div>
         <div class="space-y-2 text-sm md:text-right">
           <p class="text-ink-muted">{t.footer.noTracking}</p>
@@ -64,7 +64,8 @@ const { closing = false } = Astro.props;
   }
   .site-footer.closing {
     margin-top: 0;
-    border-top: 0;
+    border-top: 1px solid var(--color-hairline);
+    background: #070910;
     padding: calc(var(--nav-h) + 32px) 0 calc(32px + var(--bottom-h));
   }
   @media (min-width: 768px) {
@@ -94,7 +95,7 @@ const { closing = false } = Astro.props;
     bottom: 100%;
     margin-bottom: 8px;
     color: var(--color-ink);
-    opacity: 0.05;
+    opacity: 0.06;
     pointer-events: none;
     user-select: none;
   }
