@@ -28,7 +28,7 @@ export const de = {
     localOnly: 'Läuft komplett lokal in deinem Browser.',
   },
   home: {
-    title: 'uuidea – Deine Session-UUID wartet',
+    title: 'uuidea – UUID-Tools und Spiele, alles lokal im Browser',
     description:
       'Jeder Besuch bekommt eine eigene UUID. Dazu: Generatoren, Decoder und Spiele, die aus einer UUID entstehen.',
     eyebrow: 'Session · v4 · zufällig',
@@ -36,38 +36,55 @@ export const de = {
     leadSerif: 'Es gibt sie nur dieses eine Mal.',
     privacy:
       'Erzeugt mit crypto.randomUUID() direkt in deinem Browser. Nichts wird gesendet – nur dieser Tab merkt sie sich, bis du ihn schließt.',
-    stats: 'Mögliche v4-UUIDs',
-    whyEyebrow: 'Warum UUIDs?',
-    whyTitle: 'Kleine Ordnung in einem großen Chaos.',
+    facts: [
+      { v: '128', u: 'Bit', k: 'Länge' },
+      { v: '122', u: 'Bit', k: 'davon Zufall' },
+      { v: '5,3 × 10^36', u: '', k: 'mögliche v4-UUIDs' },
+    ],
+    statement: 'Eine unter Sextillionen.',
+    statementSub:
+      'Rund 5,3 Sextillionen v4-UUIDs gibt es. Erzeugst du eine Milliarde pro Sekunde, 85 Jahre lang, steht die Chance auf eine einzige Doppelung bei etwa 50 : 50.',
+    whyTitle: 'Was in 36 Zeichen steckt',
     why: [
       {
-        k: 'Struktur',
-        t: '128 Bit, fünf Gruppen, immer 8-4-4-4-12. Eine UUID sieht aus wie jede andere – und ist doch anders.',
+        k: 'Fünf Gruppen, immer 8-4-4-4-12',
+        t: '32 Hex-Zeichen, vier Bindestriche. Jede UUID sieht aus wie jede andere – und ist doch anders.',
       },
       {
-        k: 'Eindeutigkeit',
-        t: 'Erzeuge eine Milliarde pro Sekunde, 85 Jahre lang – erst dann steht die Chance auf eine einzige Doppelung bei etwa 50 : 50.',
+        k: 'Version und Variante im Inneren',
+        t: 'Ein Zeichen verrät die Version, zwei Bits die Variante. Der Rest ist Zeit, Name oder Zufall.',
       },
       {
-        k: 'Orientierung',
-        t: 'Ohne zentrale Stelle, ohne Absprache: Jede UUID weiß, wer sie ist. Das ist Freiheit mit eingebauter Ordnung.',
+        k: 'UUIDs ohne zentrales Register',
+        t: 'Keine Datenbank, keine Absprache: Jede UUID weiß, wer sie ist. Freiheit mit eingebauter Ordnung.',
       },
     ],
-    exploreEyebrow: 'Entdecken',
-    exploreTitle: 'Was du hier machen kannst',
+    anatomyTitle: 'Anatomie einer v4-UUID',
+    anatomy: [
+      { k: 'Version', v: '4', d: 'Bits 48–51' },
+      { k: 'Variante', v: '10xx', d: 'Bits 64–65 (RFC 9562)' },
+      { k: 'Zufall', v: '122 Bit', d: 'alle übrigen Bits' },
+    ],
+    exploreTitle: 'Werkzeuge und Spiele rund um UUIDs',
+    exploreLead: 'Alles läuft lokal. Kein Konto, kein Tracking, keine Wartezeit.',
+    closeTitle: 'Deine nächste UUID wartet schon.',
+    closeLead:
+      'Generieren, prüfen, dekodieren – oder eine Runde spielen, die nur aus einer UUID besteht.',
+    ctaTools: 'Tools öffnen',
+    ctaGames: 'Spiel starten',
     tiles: {
       tools: {
-        k: 'Tools / 01',
+        k: 'Tools',
         t: 'UUID-Werkzeugkasten',
         d: 'v1, v4, v5, v6, v7 – generieren, prüfen, dekodieren, umwandeln. Bis zu 1000 auf einmal.',
       },
       games: {
-        k: 'Spiele / 02',
+        k: 'Spiele',
         t: 'Spiele aus einer UUID',
-        d: 'Jede Runde entsteht deterministisch aus einer UUID. Link teilen, gleiche Runde, fairer Vergleich.',
+        d: 'Jede Runde entsteht aus einer UUID. Link teilen, gleiche Runde, fairer Vergleich.',
       },
       about: {
-        k: 'Über / 03',
+        k: 'Über',
         t: 'Warum das alles?',
         d: 'Eine kleine Liebeserklärung an 36 Zeichen.',
       },

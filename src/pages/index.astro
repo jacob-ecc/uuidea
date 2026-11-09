@@ -1,4 +1,9 @@
 ---
+/*
+  Taste-Skill (Hybrid, siehe DESIGN.md §11):
+  kind software · Hero: eigener UUID-Hero (Signature) mit data-enter ·
+  Moment: letters-assemble (gedealt) · Grounds: Aura nur im Hero · kein Shader-Effekt
+*/
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import CopyButton from '@/components/CopyButton.astro';
 import Icon from '@/components/Icon.astro';
@@ -7,158 +12,244 @@ import Uuid from '@/components/Uuid.astro';
 import { t } from '@/i18n';
 
 const h = t.home;
-// Statische Beispiel-UUIDs für die Kachel-Visuals (rein dekorativ)
+// Statische Beispiel-UUIDs für Visuals (rein dekorativ)
 const sample = [
   '0192f4c1-7a3e-7b21-9c4d-5e8f3a1b2c3d',
   'f47ac10b-58cc-4372-a567-0e02b2c3d479',
   '886313e1-3b8a-5372-9b90-0c9aee199e5d',
 ];
+const anatomyUuid = 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
 const grid = [1, 3, 5, 2, 4, 1, 5, 3, 2, 5, 1, 4, 3, 2, 4, 1];
+const group = (i: number) => (i < 8 ? 1 : i < 12 ? 2 : i < 16 ? 3 : i < 20 ? 4 : 5);
 ---
 
-<BaseLayout title={h.title} description={h.description}>
-  <section class="hero">
-    <div class="aura" aria-hidden="true"></div>
-    <div class="container-page relative z-10 pt-14 pb-16 md:pt-28 md:pb-24">
-      <p class="eyebrow enter flex items-center gap-2">
-        <span class="live-dot" aria-hidden="true"></span>
-        {h.eyebrow}
-      </p>
+<BaseLayout title={h.title} description={h.description} showcase>
+  <link slot="head" rel="modulepreload" href="/assets/moments/moments.js" />
+  <link slot="head" rel="modulepreload" href="/assets/moments/lib.js" />
 
-      <h1 class="sr-only">
-        {h.lead} {h.leadSerif}
-      </h1>
+  <section class="screen hero" data-enter aria-labelledby="hero-h">
+    <img
+      class="aura"
+      src="/aura.webp"
+      alt=""
+      aria-hidden="true"
+      width="1440"
+      height="810"
+      decoding="async"
+    />
+    <div class="wrap">
+      <div class="hero-text">
+        <p class="eyebrow enter flex items-center gap-2">
+          <span class="live-dot" aria-hidden="true"></span>
+          {h.eyebrow}
+        </p>
 
-      <div class="hero-uuid-wrap enter mt-6">
-        <output
-          id="hero-uuid"
-          class="uuid uuid-xl hero-uuid"
-          translate="no"
-          aria-label="Session-UUID"
-        >
-          <noscript>JavaScript wird benötigt</noscript>
-        </output>
-        <div class="anatomy uuid-xl" aria-hidden="true">
-          <span class="a1">
-            <i></i>
-            <b>time_low</b>
-          </span>
-          <span class="a2">
-            <i></i>
-            <b>time_mid</b>
-          </span>
-          <span class="a3">
-            <i></i>
-            <b>ver · hi</b>
-          </span>
-          <span class="a4">
-            <i></i>
-            <b>var · seq</b>
-          </span>
-          <span class="a5">
-            <i></i>
-            <b>node</b>
-          </span>
+        <div class="enter mt-6">
+          <output
+            id="hero-uuid"
+            class="uuid uuid-xl hero-uuid"
+            translate="no"
+            aria-label="Session-UUID"
+          >
+            <noscript>JavaScript wird benötigt</noscript>
+          </output>
+          <div class="anatomy uuid-xl" aria-hidden="true">
+            <span class="a1">
+              <i></i>
+              <b>time_low</b>
+            </span>
+            <span class="a2">
+              <i></i>
+              <b>time_mid</b>
+            </span>
+            <span class="a3">
+              <i></i>
+              <b>ver · hi</b>
+            </span>
+            <span class="a4">
+              <i></i>
+              <b>var · seq</b>
+            </span>
+            <span class="a5">
+              <i></i>
+              <b>node</b>
+            </span>
+          </div>
+          <p id="hero-status" class="sr-only" aria-live="polite"></p>
         </div>
-        <p id="hero-status" class="sr-only" aria-live="polite"></p>
+
+        <div class="hero-split mt-8">
+          <div class="enter">
+            <h1 id="hero-h" class="hero-h1">
+              {h.lead}
+              <span class="t-serif">{h.leadSerif}</span>
+            </h1>
+
+            <div class="mt-8 flex flex-wrap gap-3">
+              <CopyButton from="#hero-uuid" label="UUID kopieren" variant="primary" size="lg" />
+              <button type="button" class="btn btn-secondary btn-lg" id="new-uuid">
+                <span class="spin-ico">
+                  <Icon name="refresh" />
+                </span>
+                {t.common.newUuid}
+              </button>
+            </div>
+
+            <p class="privacy mt-5 max-w-[56ch] text-sm text-ink-muted">
+              <Icon name="shield" size={15} class="mr-1.5 inline-block align-[-2px] text-accent" />
+              {h.privacy}
+            </p>
+          </div>
+
+          <dl class="facts enter">
+            {h.facts.map((f) => (
+              <div>
+                <dt class="text-sm text-ink-muted">{f.k}</dt>
+                <dd class="font-mono text-ink tabular">
+                  {f.v.includes('^') ? (
+                    <>
+                      {f.v.split('^')[0]}
+                      <sup>{f.v.split('^')[1]}</sup>
+                    </>
+                  ) : (
+                    f.v
+                  )}
+                  {f.u && <span class="text-ink-muted"> {f.u}</span>}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </div>
-
-      <p class="hero-lead enter mt-6 text-ink" aria-hidden="true">
-        {h.lead}
-        <span class="t-serif text-ink">{h.leadSerif}</span>
-      </p>
-
-      <div class="enter mt-8 flex flex-wrap gap-3">
-        <CopyButton from="#hero-uuid" variant="primary" size="lg" />
-        <button type="button" class="btn btn-secondary btn-lg" id="new-uuid">
-          <span class="spin-ico">
-            <Icon name="refresh" />
-          </span>
-          {t.common.newUuid}
-        </button>
-      </div>
-
-      <p class="enter mt-6 flex max-w-[52ch] items-start gap-2 text-sm text-ink-subtle">
-        <Icon name="shield" size={16} class="mt-[3px] shrink-0 text-accent" />
-        <span>{h.privacy}</span>
-      </p>
     </div>
   </section>
 
-  <section class="container-page py-16 md:py-24" aria-labelledby="why-title">
-    <div class="grid gap-10 md:grid-cols-[1fr_1.4fr] md:gap-16">
-      <div>
-        <p class="eyebrow">{h.whyEyebrow}</p>
-        <h2 id="why-title" class="t-h1 mt-3">
+  <section
+    class="screen statement"
+    data-moment-opts='{"spread": 0.8}'
+    data-moment="letters-assemble"
+    aria-labelledby="st-h"
+  >
+    <div class="wrap">
+      <h2 id="st-h" class="mo-la__type">
+        {h.statement}
+      </h2>
+      <p class="mo-la__sub">{h.statementSub}</p>
+    </div>
+  </section>
+
+  <section class="screen" aria-labelledby="why-title">
+    <div class="wrap grid gap-10 lg:grid-cols-12 lg:gap-x-6">
+      <div class="lg:col-span-7">
+        <h2 id="why-title" class="t-h2">
           {h.whyTitle}
         </h2>
-        <div class="stat card mt-8 p-5">
-          <p class="eyebrow">{h.stats}</p>
-          <p class="mt-2 font-mono text-3xl text-ink tabular">
-            5,3 × 10<sup class="text-[0.55em]">36</sup>
-          </p>
-          <div class="spectrum-line mt-4 opacity-60"></div>
-        </div>
+        <ol class="why-list mt-8">
+          {h.why.map((item, i) => (
+            <li class="why-item">
+              <span class={`why-num font-mono n${i + 1}`}>{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3 class="t-h3">{item.k}</h3>
+                <p class="mt-1.5 text-ink-muted">{item.t}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </div>
-      <ol class="why-list">
-        {h.why.map((item, i) => (
-          <li class="why-item">
-            <span class={`why-num font-mono s${i + 1}`}>{String(i + 1).padStart(2, '0')}</span>
+      <figure class="anat-card card lg:col-span-5 lg:self-center" data-ui aria-labelledby="anat-h">
+        <p id="anat-h" class="eyebrow">
+          {h.anatomyTitle}
+        </p>
+        <div class="anat-uuid">
+          <Uuid value={anatomyUuid} />
+        </div>
+        <div class="anat-bits" aria-hidden="true">
+          {Array.from({ length: 32 }, (_, i) => (
+            <i class:list={[`g${group(i)}`, (i === 12 || i === 16) && 'is-key']} />
+          ))}
+        </div>
+        <dl class="anat-rows">
+          {h.anatomy.map((r) => (
             <div>
-              <h3 class="t-h3">{item.k}</h3>
-              <p class="mt-1.5 text-ink-muted">{item.t}</p>
+              <dt class="text-ink-muted">{r.k}</dt>
+              <dd class="font-mono text-ink">{r.v}</dd>
+              <dd class="text-sm text-ink-muted">{r.d}</dd>
             </div>
-          </li>
-        ))}
-      </ol>
+          ))}
+        </dl>
+      </figure>
     </div>
   </section>
 
-  <section class="container-page pb-8" aria-labelledby="explore-title">
-    <p class="eyebrow">{h.exploreEyebrow}</p>
-    <h2 id="explore-title" class="t-h2 mt-3">
-      {h.exploreTitle}
-    </h2>
-    <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <Tile
-        href="/tools"
-        eyebrow={h.tiles.tools.k}
-        title={h.tiles.tools.t}
-        description={h.tiles.tools.d}
-      >
-        <div class="v-tools">
-          {sample.map((s) => (
-            <Uuid value={s} class="text-[13px]" />
-          ))}
-        </div>
-      </Tile>
-      <Tile
-        href="/games"
-        eyebrow={h.tiles.games.k}
-        title={h.tiles.games.t}
-        description={h.tiles.games.d}
-      >
-        <div class="v-games">
-          {grid.map((g) => (
-            <i class={`c${g}`} />
-          ))}
-        </div>
-      </Tile>
-      <Tile
-        href="/about"
-        eyebrow={h.tiles.about.k}
-        title={h.tiles.about.t}
-        description={h.tiles.about.d}
-        class="md:col-span-2 lg:col-span-1"
-      >
-        <div class="v-about">
-          <span class="t-serif">36</span>
-          <span class="font-mono text-xs text-ink-subtle">Zeichen · 128 Bit</span>
-        </div>
-      </Tile>
+  <section class="screen" aria-labelledby="explore-title">
+    <div class="wrap">
+      <h2 id="explore-title" class="t-h2">
+        {h.exploreTitle}
+      </h2>
+      <p class="mt-3 text-ink-muted">{h.exploreLead}</p>
+      <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <Tile
+          href="/tools"
+          eyebrow={h.tiles.tools.k}
+          title={h.tiles.tools.t}
+          description={h.tiles.tools.d}
+        >
+          <svg class="v-tools" viewBox="0 0 320 84" role="presentation">
+            {sample.map((u, row) => (
+              <text x="20" y={22 + row * 24}>
+                {u.split('-').map((seg, i) => (
+                  <>
+                    {i > 0 && <tspan class="d">-</tspan>}
+                    <tspan class={'f' + (i + 1)}>{seg}</tspan>
+                  </>
+                ))}
+              </text>
+            ))}
+          </svg>
+        </Tile>
+        <Tile
+          href="/games"
+          eyebrow={h.tiles.games.k}
+          title={h.tiles.games.t}
+          description={h.tiles.games.d}
+        >
+          <div class="v-games">
+            {grid.map((g) => (
+              <i class={`c${g}`} />
+            ))}
+          </div>
+        </Tile>
+        <Tile
+          href="/about"
+          eyebrow={h.tiles.about.k}
+          title={h.tiles.about.t}
+          description={h.tiles.about.d}
+          class="md:col-span-2 lg:col-span-1"
+        >
+          <div class="v-about">
+            <span class="t-serif">36</span>
+          </div>
+        </Tile>
+      </div>
     </div>
   </section>
+
+  <Fragment slot="close">
+    <h2 class="close-title">{h.closeTitle}</h2>
+    <p class="prose-w mt-5 text-lg text-ink-muted">{h.closeLead}</p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href="/tools" class="btn btn-primary btn-lg">
+        {h.ctaTools}
+        <Icon name="arrow" />
+      </a>
+      <a href="/games" class="btn btn-secondary btn-lg">
+        {h.ctaGames}
+      </a>
+    </div>
+  </Fragment>
 </BaseLayout>
+
+<script is:inline type="module" src="/assets/moments/moments.js"></script>
 
 <script>
   import { ensureSession, newSessionUuid } from '@/lib/session';
@@ -184,12 +275,47 @@ const grid = [1, 3, 5, 2, 4, 1, 5, 3, 2, 5, 1, 4, 3, 2, 4, 1];
 
 <style>
   .hero {
-    position: relative;
     overflow: hidden;
     isolation: isolate;
   }
-  .hero-uuid-wrap {
-    animation-delay: 60ms;
+  @media (max-width: 639px) {
+    .hero {
+      min-height: 100svh;
+    }
+  }
+  .hero-split {
+    display: grid;
+    gap: 32px;
+  }
+  @media (min-width: 1024px) {
+    .hero-split {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 24px;
+      align-items: start;
+    }
+    .hero-split > :first-child {
+      grid-column: 1 / span 7;
+    }
+    .hero-split > .facts {
+      grid-column: 8 / span 5;
+    }
+  }
+  .statement {
+    overflow: hidden;
+  }
+  .statement :global(.mo-la__type) {
+    font-size: clamp(48px, 9vw, 136px);
+  }
+  @media (max-width: 639px) {
+    .statement :global(.mo-la__type) {
+      font-size: clamp(40px, 12vw, 72px);
+    }
+  }
+  .close-title {
+    font-size: clamp(2.5rem, 1.4rem + 4.2vw, 5rem);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    max-width: 16ch;
   }
   .hero-uuid {
     display: block;
@@ -250,19 +376,44 @@ const grid = [1, 3, 5, 2, 4, 1, 5, 3, 2, 5, 1, 4, 3, 2, 4, 1];
   .a5 i {
     background: var(--color-seg-5);
   }
-  .hero-lead {
-    font-size: clamp(1.25rem, 1.05rem + 1.2vw, 2rem);
-    line-height: 1.25;
-    letter-spacing: -0.02em;
+  .hero-h1 {
+    font-size: clamp(1.75rem, 1.2rem + 2.4vw, 2.75rem);
+    line-height: 1.12;
+    letter-spacing: -0.025em;
     font-weight: 500;
-    max-width: 24ch;
-    animation-delay: 120ms;
+    max-width: 22ch;
   }
-  .hero-lead .t-serif {
+  .hero-h1 .t-serif {
     display: block;
-    font-size: 1.12em;
-    letter-spacing: -0.005em;
+    font-size: 1.1em;
   }
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-hairline);
+  }
+  @media (min-width: 1024px) {
+    .facts {
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+    .facts > div {
+      padding: 14px 0;
+      border-top: 1px solid var(--color-hairline);
+    }
+  }
+  .facts dd {
+    font-size: clamp(1rem, 0.85rem + 0.8vw, 1.5rem);
+    margin-top: 2px;
+  }
+  .facts sup {
+    font-size: 0.6em;
+  }
+
   .live-dot {
     width: 6px;
     height: 6px;
@@ -284,13 +435,11 @@ const grid = [1, 3, 5, 2, 4, 1, 5, 3, 2, 5, 1, 4, 3, 2, 4, 1];
 
   .why-list {
     display: grid;
-    gap: 0;
   }
   .why-item {
     display: grid;
-    grid-template-columns: 44px 1fr;
-    gap: 16px;
-    padding: 24px 0;
+    gap: 6px;
+    padding: 20px 0;
     border-top: 1px solid var(--color-hairline);
   }
   .why-item:last-child {
@@ -300,26 +449,101 @@ const grid = [1, 3, 5, 2, 4, 1, 5, 3, 2, 5, 1, 4, 3, 2, 4, 1];
     font-size: 14px;
     padding-top: 3px;
   }
-  .why-num.s1 {
+  .why-num.n1 {
     color: var(--color-seg-1);
   }
-  .why-num.s2 {
+  .why-num.n2 {
     color: var(--color-seg-3);
   }
-  .why-num.s3 {
+  .why-num.n3 {
     color: var(--color-seg-5);
   }
 
-  .v-tools {
+  .anat-card {
+    container-type: inline-size;
+    margin: 0;
+    padding: 20px;
     display: grid;
-    gap: 6px;
-    opacity: 0.9;
-    mask-image: linear-gradient(90deg, #000 60%, transparent);
-    transform: translateX(16px);
+    gap: 20px;
+  }
+  @media (min-width: 768px) {
+    .anat-card {
+      padding: 32px;
+      gap: 28px;
+    }
+  }
+  .anat-uuid {
+    /* 36 Zeichen à 0,6em füllen die Karte exakt */
+    font-size: calc(100cqi / 21.6);
+  }
+  .anat-uuid :global(.uuid) {
+    word-break: normal;
     white-space: nowrap;
   }
-  .v-tools :global(.uuid) {
-    word-break: normal;
+  .anat-bits {
+    display: grid;
+    grid-template-columns: repeat(32, 1fr);
+    gap: 3px;
+  }
+  .anat-bits i {
+    display: block;
+    height: 28px;
+    border-radius: 3px;
+    opacity: 0.22;
+  }
+  .anat-bits .g1 {
+    background: var(--color-seg-1);
+  }
+  .anat-bits .g2 {
+    background: var(--color-seg-2);
+  }
+  .anat-bits .g3 {
+    background: var(--color-seg-3);
+  }
+  .anat-bits .g4 {
+    background: var(--color-seg-4);
+  }
+  .anat-bits .g5 {
+    background: var(--color-seg-5);
+  }
+  .anat-bits .is-key {
+    opacity: 1;
+  }
+  .anat-rows > div {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 2px 16px;
+    padding: 14px 0;
+    border-top: 1px solid var(--color-hairline);
+  }
+  .anat-rows dd:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .v-tools {
+    width: 100%;
+    height: 100%;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+  }
+  .v-tools .f1 {
+    fill: var(--color-seg-1);
+  }
+  .v-tools .f2 {
+    fill: var(--color-seg-2);
+  }
+  .v-tools .f3 {
+    fill: var(--color-seg-3);
+  }
+  .v-tools .f4 {
+    fill: var(--color-seg-4);
+  }
+  .v-tools .f5 {
+    fill: var(--color-seg-5);
+  }
+  .v-tools .d {
+    fill: var(--color-ink-subtle);
   }
   .v-games {
     display: grid;
