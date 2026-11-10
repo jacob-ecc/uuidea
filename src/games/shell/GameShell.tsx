@@ -15,6 +15,7 @@ import { initialState, type Challenge } from './challenge';
 import { History } from './History';
 import { ResultView } from './ResultView';
 import { SeedPicker } from './SeedPicker';
+import { todayUuid } from '@/lib/uuid/daily';
 import { SharePanel } from './SharePanel';
 
 const L = t.games.shell;
@@ -138,6 +139,7 @@ function Shell({ game }: { game: GameDef }) {
             disabled={playing}
             onNew={() => changeUuid(v4())}
             onSession={() => changeUuid(ensureSession())}
+            onDaily={() => void todayUuid().then(changeUuid)}
             onCustom={changeUuid}
           />
         </div>

@@ -52,6 +52,20 @@ export const de = {
       checkOk: 'Gültig',
       steps: ['Format 8-4-4-4-12', 'Version-Nibble = 4', 'Varianten-Bits = 10'],
     },
+    daily: {
+      eyebrow: 'UUID des Tages',
+      title: 'Heute hat jeder dieselbe.',
+      lead: 'Eine UUID für alle, die heute uuidea öffnen – um Mitternacht kommt die nächste. Nicht ausgelost, sondern berechnet: eine v5 aus dem Datum. Du kannst sie selbst nachrechnen.',
+      copy: 'UUID kopieren',
+      play: 'Tagesrunde spielen',
+      card: 'Tages-UUID',
+      namespace: 'Namespace',
+      name: 'Name',
+      next: 'Nächste in',
+      verify: 'Im Generator nachrechnen',
+      countdown: (h: number, m: number) =>
+        h > 0 ? `${h} h ${m} min` : m > 0 ? `${m} min` : 'unter einer Minute',
+    },
     statement: 'Eine unter Sextillionen.',
     statementSub:
       'Rund 5,3 Sextillionen v4-UUIDs gibt es. Erzeugst du eine Milliarde pro Sekunde, 85 Jahre lang, steht die Chance auf eine einzige Doppelung bei etwa 50 : 50.',
@@ -275,6 +289,7 @@ export const de = {
       seedHint: 'Gleiche UUID, gleiche Runde. Wer denselben Link öffnet, spielt exakt dasselbe.',
       newUuid: 'Neue UUID',
       useSession: 'Session-UUID',
+      useDaily: 'UUID des Tages',
       custom: 'Eigene UUID',
       customLabel: 'UUID für diese Runde',
       customApply: 'Übernehmen',

@@ -10,12 +10,14 @@ export function SeedPicker({
   disabled,
   onNew,
   onSession,
+  onDaily,
   onCustom,
 }: {
   uuid: string;
   disabled: boolean;
   onNew(): void;
   onSession(): void;
+  onDaily(): void;
   onCustom(uuid: string): void;
 }) {
   const [open, setOpen] = useState(false);
@@ -39,6 +41,9 @@ export function SeedPicker({
         </button>
         <button type="button" class="btn btn-ghost" disabled={disabled} onClick={onSession}>
           {L.useSession}
+        </button>
+        <button type="button" class="btn btn-ghost" disabled={disabled} onClick={onDaily}>
+          {L.useDaily}
         </button>
         <button
           type="button"

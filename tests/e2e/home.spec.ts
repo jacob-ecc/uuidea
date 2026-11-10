@@ -39,3 +39,16 @@ test('404-Seite liefert die Nil-UUID', async ({ page }) => {
   await page.goto('/404');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('00000000');
 });
+
+test('UUID des Tages: v5 aus dem Berliner Datum, verlinkt in die Tagesrunde', async ({ page }) => {
+  await page.goto('/');
+  const daily = page.locator('#daily-uuid');
+  await expect(daily).toHaveAttribute('data-uuid', /^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab]/);
+  const id = await daily.getAttribute('data-uuid');
+  const key = await page.locator('#daily-name').textContent();
+  expect(key).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  // Für alle gleich: ein zweiter Aufruf liefert dieselbe UUID
+  await page.reload();
+  await expect(daily).toHaveAttribute('data-uuid', id!);
+  await expect(page.locator('#daily-play')).toHaveAttribute('href', `/games/memory?id=${id}`);
+});

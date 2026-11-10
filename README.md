@@ -60,6 +60,13 @@ Alles läuft lokal; die Logik liegt als reines TypeScript in `src/lib/uuid/` und
 String in beiden Alphabeten gültig. Der Decoder wählt dann die Lesart, die eine plausible UUID ergibt
 (Variante RFC 9562, Version 1–8), und zeigt die andere als Alternative an.
 
+## UUID des Tages (Startseite)
+
+Für alle gleich, wechselt um Mitternacht Berliner Zeit – ohne Server: `src/lib/uuid/daily.ts` rechnet
+`v5(Namespace, "YYYY-MM-DD")` mit der festen Namespace-UUID `ad9c0a59-4242-5f10-a2a9-c02b313ae1af`
+(= `v5(DNS, "uuidea.de")`). Nachrechenbar im Generator (v5, eigene Namespace-UUID, Name = Datum).
+In den Spielen setzt „UUID des Tages“ im Seed-Picker die Tagesrunde.
+
 ## Spiele (`/games`)
 
 Jede Runde entsteht komplett aus einer UUID. Gleiche UUID, gleiche Runde, auf jedem Gerät.

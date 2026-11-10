@@ -12,6 +12,7 @@ import Uuid from '@/components/Uuid.astro';
 import { t } from '@/i18n';
 import { toBytes, fromBytes, bytesToBase58, bytesToBase64Url, v7Timestamp } from '@/lib/uuid/bytes';
 import { rngFor } from '@/lib/seed/prng';
+import { DAILY_NAMESPACE } from '@/lib/uuid/daily';
 
 const h = t.home;
 
@@ -216,7 +217,73 @@ const segOf = (i: number) => (i < 8 ? 1 : i < 12 ? 2 : i < 16 ? 3 : i < 20 ? 4 :
     </div>
   </section>
 
-  <!-- 3 · Tools (dunkles Band) -->
+  <!-- 3 · UUID des Tages (für alle gleich, wechselt um Mitternacht Berliner Zeit) -->
+  <section class="screen daily" aria-labelledby="daily-h" data-daily>
+    <div class="wrap grid-12 daily-grid">
+      <div class="daily-copy">
+        <p class="eyebrow flex items-center gap-2">
+          <Icon name="calendar" size={14} class="text-accent" />
+          {h.daily.eyebrow}
+        </p>
+        <h2 id="daily-h" class="t-h2 mt-4">
+          {h.daily.title}
+        </h2>
+        <p class="t-lead mt-4 max-w-[48ch]">{h.daily.lead}</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <CopyButton from="#daily-uuid" label={h.daily.copy} variant="primary" size="lg" />
+          <a href="/games/memory" class="btn btn-secondary btn-lg" id="daily-play">
+            {h.daily.play}
+            <Icon name="arrow" />
+          </a>
+        </div>
+      </div>
+
+      <div class="daily-card card">
+        <div class="daily-head">
+          <p class="daily-date" id="daily-date">
+            &nbsp;
+          </p>
+          <span class="badge badge-accent">v5</span>
+        </div>
+        <output id="daily-uuid" class="uuid daily-uuid" translate="no" aria-label={h.daily.card}>
+          <noscript>JavaScript wird benötigt</noscript>
+        </output>
+        <div class="insp-anat daily-anat" aria-hidden="true">
+          <i class="a1"></i>
+          <i class="a2"></i>
+          <i class="a3"></i>
+          <i class="a4"></i>
+          <i class="a5"></i>
+        </div>
+        <dl class="daily-rows">
+          <div>
+            <dt>{h.daily.namespace}</dt>
+            <dd class="font-mono">
+              <Uuid value={DAILY_NAMESPACE} />
+            </dd>
+          </div>
+          <div>
+            <dt>{h.daily.name}</dt>
+            <dd class="font-mono" id="daily-name">
+              …
+            </dd>
+          </div>
+          <div>
+            <dt>{h.daily.next}</dt>
+            <dd class="font-mono tabular" id="daily-next">
+              …
+            </dd>
+          </div>
+        </dl>
+        <a href="/tools#generator" class="daily-verify">
+          {h.daily.verify}
+          <Icon name="arrow" size={16} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · Tools (dunkles Band) -->
   <section class="screen band tools" aria-labelledby="tools-h">
     <div class="wrap">
       <div class="sec-head">
@@ -327,7 +394,7 @@ const segOf = (i: number) => (i < 8 ? 1 : i < 12 ? 2 : i < 16 ? 3 : i < 20 ? 4 :
     </div>
   </section>
 
-  <!-- 4 · Spiele -->
+  <!-- 5 · Spiele -->
   <section class="screen games" aria-labelledby="games-h">
     <div class="wrap grid-12 games-grid">
       <div class="games-copy">
@@ -404,6 +471,9 @@ const segOf = (i: number) => (i < 8 ? 1 : i < 12 ? 2 : i < 16 ? 3 : i < 20 ? 4 :
   import { decryptInto, renderUuidChars } from '@/scripts/decrypt';
   import { initStepsLoop } from '@/scripts/steps-loop';
   import { toBytes, bytesToBase64Url, bytesToBase58 } from '@/lib/uuid/bytes';
+  import { DAILY_TZ, dailyUuid, dayKey, nextDayStart } from '@/lib/uuid/daily';
+  import { segmentHtml } from '@/lib/uuid/segments';
+  import { t } from '@/i18n';
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const el = document.getElementById('hero-uuid');
@@ -450,6 +520,53 @@ const segOf = (i: number) => (i < 8 ? 1 : i < 12 ? 2 : i < 16 ? 3 : i < 20 ? 4 :
   const note = document.querySelector<HTMLElement>('[data-steps]');
   const pause = document.getElementById('note-pause');
   if (note && pause) initStepsLoop(note, pause, reduced);
+
+  // UUID des Tages: v5(Namespace, Datum) – für alle gleich, wechselt um Mitternacht (Berlin)
+  const dEl = document.getElementById('daily-uuid');
+  const dDate = document.getElementById('daily-date');
+  const dName = document.getElementById('daily-name');
+  const dNext = document.getElementById('daily-next');
+  const dPlay = document.querySelector<HTMLAnchorElement>('#daily-play');
+  const dateFmt = new Intl.DateTimeFormat('de-DE', {
+    timeZone: DAILY_TZ,
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+  let dKey = '';
+  let dEnd = 0;
+
+  async function paintDaily(): Promise<void> {
+    const now = Date.now();
+    const key = dayKey(now);
+    if (key !== dKey && dEl) {
+      dKey = key;
+      dEnd = nextDayStart(now);
+      const id = await dailyUuid(key);
+      dEl.dataset.uuid = id;
+      dEl.setAttribute('aria-label', `${t.home.daily.card}: ${id}`);
+      dEl.innerHTML = segmentHtml(id);
+      if (dDate) dDate.textContent = dateFmt.format(now);
+      if (dName) dName.textContent = key;
+      if (dPlay) dPlay.href = `/games/memory?id=${id}`;
+    }
+    const left = Math.max(0, dEnd - now);
+    if (dNext)
+      dNext.textContent = t.home.daily.countdown(
+        Math.floor(left / 3_600_000),
+        Math.floor((left % 3_600_000) / 60_000),
+      );
+  }
+
+  if (dEl) {
+    void paintDaily();
+    // Countdown pro Minute; um Mitternacht kommt automatisch die neue UUID
+    setInterval(() => void paintDaily(), 15_000);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) void paintDaily();
+    });
+  }
 </script>
 
 <style>
@@ -828,6 +945,95 @@ const segOf = (i: number) => (i < 8 ? 1 : i < 12 ? 2 : i < 16 ? 3 : i < 20 ? 4 :
     line-height: 1;
     color: var(--color-ink);
     letter-spacing: -0.03em;
+  }
+
+  /* ---------- UUID des Tages ---------- */
+  .daily-grid {
+    row-gap: 40px;
+    align-items: center;
+  }
+  .daily-copy,
+  .daily-card {
+    grid-column: 1 / -1;
+  }
+  @media (min-width: 1024px) {
+    .daily-copy {
+      grid-column: 1 / span 5;
+    }
+    .daily-card {
+      grid-column: 7 / span 6;
+    }
+  }
+  .daily-card {
+    min-width: 0;
+    padding: 20px;
+    container-type: inline-size;
+  }
+  @media (min-width: 640px) {
+    .daily-card {
+      padding: 28px;
+    }
+  }
+  .daily-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .daily-date {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .daily-uuid {
+    display: block;
+    min-height: 1.25em;
+    margin-top: 18px;
+    font-size: calc(100cqi / 21.6);
+    line-height: 1.25;
+    white-space: nowrap;
+    word-break: normal;
+    user-select: all;
+  }
+  .daily-rows {
+    margin-top: 22px;
+  }
+  .daily-rows > div {
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    padding: 11px 0;
+    border-top: 1px solid var(--color-hairline);
+    font-size: 14px;
+  }
+  .daily-rows dt {
+    flex: none;
+    color: var(--color-ink-muted);
+  }
+  .daily-rows dd {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--color-ink);
+  }
+  .daily-rows dd :global(.uuid) {
+    word-break: normal;
+  }
+  .daily-verify {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    font-size: 14px;
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  .daily-verify :global(svg) {
+    transition: transform 200ms var(--ease-out);
+  }
+  .daily-verify:hover :global(svg) {
+    transform: translateX(3px);
   }
 
   /* ---------- Tools ---------- */

@@ -11,6 +11,8 @@ export const paths = {
   arrow: 'M5 12h14M13 6l6 6-6 6',
   shield: 'M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z',
   download: 'M12 4v11M7 10l5 5 5-5M5 20h14',
+  calendar:
+    'M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM4 10h16M8 3v4M16 3v4',
   share: 'M12 15V3M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6',
 } as const;
 export type IconName = keyof typeof paths;
