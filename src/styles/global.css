@@ -76,6 +76,10 @@
     --s-4: 16px;
     --s-6: 24px;
     --t-lead: 18px;
+    --bg: var(--color-canvas);
+    --surface: var(--color-surface-1);
+    --accent: var(--color-accent);
+    --r-lg: var(--radius-xl);
   }
   @media (min-width: 640px) {
     :root {

@@ -1,0 +1,38 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import GameHost from '@/islands/GameHost';
+import { liveGames } from '@/games/registry';
+import { t } from '@/i18n';
+import '@/styles/tools.css';
+import '@/styles/games.css';
+
+export function getStaticPaths() {
+  return liveGames.map((g) => ({ params: { slug: g.slug } }));
+}
+
+const { slug } = Astro.params;
+const p = t.games[slug as 'reaction'];
+---
+
+<BaseLayout title={p.title} description={p.description} ogImage="/og/games.png">
+  <header class="wrap enter-page game-hero">
+    <p class="eyebrow enter">
+      <a href="/games" class="game-back">
+        {t.games.eyebrow}
+      </a>
+      <span aria-hidden="true"> / </span>
+      {p.eyebrow.split(' · ')[0]}
+    </p>
+    <h1 class="t-h1 enter mt-3">{p.h1}</h1>
+    <p class="t-lead enter prose-w mt-4">{p.lead}</p>
+  </header>
+
+  <div class="wrap game-main">
+    <GameHost slug={slug} client:only="preact">
+      <div slot="fallback" class="tool-skeleton game-skeleton" aria-hidden="true"></div>
+    </GameHost>
+    <noscript>
+      <p class="notice">Die Spiele laufen komplett im Browser und brauchen JavaScript.</p>
+    </noscript>
+  </div>
+</BaseLayout>

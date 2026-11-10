@@ -144,3 +144,7 @@ Showcase-Seiten (Home, Spiele-Übersicht, About) folgen dem Skill; Tool- und Spi
 App-UI und folgen nur seinen Qualitäts-Checks. Prüfen: siehe README (`gate.mjs`, Ziel PASS).
 Freigestellt (`.taste-skill/waivers.json`): `row-lines` für den `marquee-row`-Moment – die Zeile
 blendet an den Rändern bewusst aus.
+
+**`/games` (eigener Deal, 10.11.2026):** Hero `triptych` (Headline · Collage aus drei Sets des Reaktionstests,
+Wechsel alle 2,8 s mit Pause-Knopf · Button), Moment `iris-opens` im Abschnitt „Runde“ (vom canvas auf das
+Band). Spielseiten (`/games/<slug>`) sind App-UI wie `/tools` (`src/styles/games.css`).
