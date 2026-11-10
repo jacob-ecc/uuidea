@@ -3,7 +3,7 @@
 UUID-Tools und kleine Spiele, deren Runden komplett aus einer UUID entstehen.
 Rein statisch (Astro), Dark Theme, kein Tracking, alles läuft lokal im Browser.
 
-> Status: **M3** – Homepage, UUID-Tools und die Spiele-Plattform mit dem Reaktionstest (Seed-System, Share-Links, lokaler Verlauf).
+> Status: **M4** – Homepage, UUID-Tools und alle fünf Spiele (Reaktion, Memory, Sortieren, Sequenz, Hex-Farben) mit Seed-System, Share-Links und lokalem Verlauf.
 > Die vollständige Doku (Architektur, Seed-/Share-Format, Deployment) wächst mit den Meilensteinen.
 
 ## Lokal starten
@@ -86,3 +86,11 @@ Zusätzlich prüft jedes Spiel seine Felder auf Plausibilität (`meta.valid`).
 **Reaktionstest:** fünf Durchgänge, Wartezeit 1,2–4,2 s (10-ms-Raster) und Signalfarbe aus dem Strom
 `main`, Ersatz-Wartezeiten nach Frühstarts aus `retry`. Unter 100 ms zählt als Frühstart (+100 ms auf den
 Schnitt), ohne Reaktion endet ein Durchgang nach 2 s. Felder: `[Schnitt+Strafe, Bester, Frühstarts, t1…t5]`.
+
+| Spiel      | ID  | Aus der UUID                                                                                | Felder im Share-Code                          | Besser ist                                                     |
+| ---------- | --- | ------------------------------------------------------------------------------------------- | --------------------------------------------- | -------------------------------------------------------------- |
+| Reaktion   | 1   | Wartezeiten, Signalfarben, Ersatz-Wartezeiten                                               | `[Schnitt+Strafe, Bester, Frühstarts, t1…t5]` | weniger ms                                                     |
+| Memory     | 2   | welche 8 der 16 Hex-Ziffern, Kartenlage (4×4)                                               | `[Züge, Zeit ms]`                             | weniger Züge, dann Zeit                                        |
+| Sortieren  | 3   | Startfeld des 3×3-Schiebepuzzles (lösbar, Manhattan ≥ 12); kürzeste Lösung per Breitensuche | `[Züge, Zeit ms]`                             | weniger Züge, dann Zeit; unter der kürzesten Lösung = ungültig |
+| Sequenz    | 4   | Folge aus 20 Schritten (Felder 1–4)                                                         | `[geschaffte Stufen]`                         | mehr Stufen                                                    |
+| Hex-Farben | 5   | 10 Farben, je 3 Ablenker (Streuung 96 → 42 pro Kanal)                                       | `[Treffer, Bedenkzeit ms]`                    | mehr Treffer, dann Zeit                                        |

@@ -14,7 +14,11 @@ import { games } from '@/games/registry';
 import { reaction } from '@/games/reaction/meta';
 import { makePlan, toFields } from '@/games/reaction/logic';
 import { ms, sec } from '@/games/format';
-import { cyrb128, rngFor } from '@/lib/seed/prng';
+import { cyrb128 } from '@/lib/seed/prng';
+import { colorOf, hexDigit, makeDeck } from '@/games/memory/logic';
+import { makeBoard } from '@/games/sort/logic';
+import { makeSequence } from '@/games/sequence/logic';
+import { makeRounds } from '@/games/hexcolor/logic';
 import { buildShareUrl, encodeResult } from '@/lib/share/codec';
 import { base64UrlToBytes } from '@/lib/uuid/bytes';
 import { t } from '@/i18n';
@@ -53,30 +57,16 @@ let qd = '';
 for (let y = 0; y < qn; y++)
   for (let xx = 0; xx < qn; xx++) if (q.isDark(y, xx)) qd += `M${xx} ${y}h1v1h-1z`;
 
-// Vorschauen der kommenden Spiele, ebenfalls aus der UUID gemischt
-const memColors = [
-  '#5ab9fc',
-  '#5ce1e6',
-  '#74e0a8',
-  '#f2c46d',
-  '#ff8f70',
-  '#c3cad6',
-  '#3b82c4',
-  '#2fa58c',
-];
-const memDeck = rngFor(demo, 'memory').shuffle([...memColors, ...memColors]);
-const memOpen = new Set([2, 9]);
-const sortTiles = rngFor(demo, 'sort').shuffle(Array.from({ length: 16 }, (_, i) => i));
-const seqRng = rngFor(demo, 'sequence');
-const seqLit = seqRng.int(0, 3);
-const hexRng = rngFor(demo, 'hexcolor');
-const hex = () =>
-  '#' + Array.from({ length: 3 }, () => hexRng.int(32, 223).toString(16).padStart(2, '0')).join('');
-const hexTarget = hex();
-const hexOptions = hexRng.shuffle([hexTarget, hex(), hex()]);
+// Vorschauen der anderen Spiele: echte Startlagen derselben UUID
+const memDeck = makeDeck(demo);
+const memTwin = memDeck.cards.findIndex((d, j) => j !== 5 && d === memDeck.cards[5]);
+const memOpen = new Set([2, 5, memTwin]);
+const sortBoard = makeBoard(demo);
+const seqLit = makeSequence(demo)[0]!;
+const hexRound = makeRounds(demo)[0]!;
 
 const cardOf = Object.fromEntries(games.map((gm) => [gm.slug, gm]));
-const soonSlugs = ['memory', 'sort', 'sequence', 'hexcolor'] as const;
+const moreSlugs = ['memory', 'sort', 'sequence', 'hexcolor'] as const;
 ---
 
 <BaseLayout title={g.title} description={g.description} ogImage="/og/games.png" showcase>
@@ -243,47 +233,53 @@ const soonSlugs = ['memory', 'sort', 'sequence', 'hexcolor'] as const;
           </div>
         </a>
 
-        <ul class="soon-list">
-          {soonSlugs.map((slug) => (
-            <li class="soon-row">
-              <div class:list={['soon-frag', `gfrag-${slug}`]} data-ui aria-hidden="true">
-                {slug === 'memory' && (
-                  <div class="mem">
-                    {memDeck.map((c, i) => (
-                      <span class:list={[memOpen.has(i) && 'is-open']} data-hex={c} />
-                    ))}
-                  </div>
-                )}
-                {slug === 'sort' && (
-                  <div class="srt">
-                    {sortTiles.map((n) => (n === 0 ? <span class="is-empty" /> : <span>{n}</span>))}
-                  </div>
-                )}
-                {slug === 'sequence' && (
-                  <div class="seq">
-                    {[1, 2, 3, 4].map((c, i) => (
-                      <span data-c={c} class:list={[i === seqLit && 'is-lit']} />
-                    ))}
-                  </div>
-                )}
-                {slug === 'hexcolor' && (
-                  <div class="hx">
-                    <span class="hx-swatch" data-hex={hexTarget} />
-                    <span class="hx-opts">
-                      {hexOptions.map((h) => (
-                        <span>{h}</span>
+        <ul class="more-list">
+          {moreSlugs.map((slug) => (
+            <li>
+              <a href={`/games/${slug}`} class="more-row">
+                <div class:list={['more-frag', `gfrag-${slug}`]} data-ui aria-hidden="true">
+                  {slug === 'memory' && (
+                    <div class="mem">
+                      {memDeck.cards.map((d, i) => (
+                        <span class:list={[memOpen.has(i) && 'is-open']} data-c={colorOf(d)}>
+                          {memOpen.has(i) ? hexDigit(d) : ''}
+                        </span>
                       ))}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div class="soon-text">
-                <p class="t-h3 flex items-center gap-3 text-ink">
-                  {cardOf[slug]!.name}
-                  <span class="badge">{g.soon}</span>
-                </p>
-                <p class="mt-1 text-[15px] text-ink-muted">{cardOf[slug]!.tagline}</p>
-              </div>
+                    </div>
+                  )}
+                  {slug === 'sort' && (
+                    <div class="srt">
+                      {sortBoard.map((n) =>
+                        n === 0 ? <span class="is-empty" /> : <span>{n}</span>,
+                      )}
+                    </div>
+                  )}
+                  {slug === 'sequence' && (
+                    <div class="seq">
+                      {[1, 2, 3, 4].map((c) => (
+                        <span data-c={c} class:list={[c === seqLit && 'is-lit']} />
+                      ))}
+                    </div>
+                  )}
+                  {slug === 'hexcolor' && (
+                    <div class="hx">
+                      <span class="hx-swatch" data-hex={hexRound.target} />
+                      <span class="hx-opts">
+                        {hexRound.options.map((h) => (
+                          <span>{h}</span>
+                        ))}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div class="more-text">
+                  <p class="t-h3 flex items-center justify-between gap-3 text-ink">
+                    {cardOf[slug]!.name}
+                    <Icon name="arrow" class="gcard-arrow" />
+                  </p>
+                  <p class="mt-1 text-[15px] text-ink-muted">{cardOf[slug]!.tagline}</p>
+                </div>
+              </a>
             </li>
           ))}
         </ul>
@@ -864,13 +860,13 @@ const soonSlugs = ['memory', 'sort', 'sequence', 'hexcolor'] as const;
     }
   }
 
-  /* ---------- Spiele: eine Karte (spielbar) + Liste (kommt) ---------- */
+  /* ---------- Spiele: Reaktion als Karte, die anderen vier als Liste ---------- */
   .cards {
     row-gap: var(--gutter);
     align-items: stretch;
   }
   .gcard-live,
-  .soon-list {
+  .more-list {
     grid-column: 1 / -1;
     min-width: 0;
   }
@@ -878,7 +874,7 @@ const soonSlugs = ['memory', 'sort', 'sequence', 'hexcolor'] as const;
     .gcard-live {
       grid-column: 1 / span 6;
     }
-    .soon-list {
+    .more-list {
       grid-column: 7 / span 6;
     }
   }
@@ -963,22 +959,42 @@ const soonSlugs = ['memory', 'sort', 'sequence', 'hexcolor'] as const;
     }
   }
 
-  .soon-list {
+  .more-list {
     display: grid;
     grid-template-rows: repeat(4, 1fr);
   }
-  .soon-row:first-child {
-    padding-top: 0;
+  .more-list > li {
+    display: grid;
+    border-bottom: 1px solid var(--color-hairline);
   }
-  .soon-row {
+  .more-row {
     display: grid;
     grid-template-columns: 112px minmax(0, 1fr);
     align-items: center;
     gap: 20px;
     padding: 12px 0;
-    border-bottom: 1px solid var(--color-hairline);
+    text-decoration: none;
   }
-  .soon-frag {
+  .more-list > li:first-child .more-row {
+    padding-top: 0;
+  }
+  .more-row:hover .t-h3 {
+    color: var(--color-accent);
+  }
+  .more-row :global(.gcard-arrow) {
+    color: var(--color-ink-subtle);
+    transition:
+      transform 200ms var(--ease-out),
+      color 200ms var(--ease-out);
+  }
+  .more-row:hover :global(.gcard-arrow) {
+    transform: translateX(3px);
+    color: var(--color-accent);
+  }
+  .more-row .t-h3 {
+    transition: color 200ms var(--ease-out);
+  }
+  .more-frag {
     display: grid;
     place-items: center start;
     padding-left: 14px;
@@ -990,10 +1006,10 @@ const soonSlugs = ['memory', 'sort', 'sequence', 'hexcolor'] as const;
   }
   /* Tablet: Liste ohne Vorschauen, damit der Abschnitt ein Bildschirm bleibt (Handy hat zwei) */
   @media (min-width: 640px) and (max-width: 1023px) {
-    .soon-row {
+    .more-row {
       grid-template-columns: minmax(0, 1fr);
     }
-    .soon-frag {
+    .more-frag {
       display: none;
     }
     .gfrag {
@@ -1002,30 +1018,36 @@ const soonSlugs = ['memory', 'sort', 'sequence', 'hexcolor'] as const;
   }
   .mem {
     display: grid;
-    grid-template-columns: repeat(8, 9px);
+    grid-template-columns: repeat(4, 16px);
     gap: 3px;
   }
   .mem span {
-    aspect-ratio: 1;
-    border-radius: 2px;
-    background: var(--color-surface-3);
-  }
-  .mem span.is-open {
-    background: var(--hex);
-  }
-  .srt {
-    display: grid;
-    grid-template-columns: repeat(4, 18px);
-    gap: 3px;
-  }
-  .srt span {
     display: grid;
     place-items: center;
     height: 16px;
     border-radius: 2px;
     background: var(--color-surface-3);
     font-family: var(--font-mono);
-    font-size: 9px;
+    font-size: 10px;
+    color: var(--sig);
+  }
+  .mem span.is-open {
+    background: color-mix(in oklab, var(--sig) 18%, var(--color-surface-1));
+    outline: 1px solid var(--sig);
+  }
+  .srt {
+    display: grid;
+    grid-template-columns: repeat(3, 22px);
+    gap: 3px;
+  }
+  .srt span {
+    display: grid;
+    place-items: center;
+    height: 22px;
+    border-radius: 2px;
+    background: var(--color-surface-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
     color: var(--color-ink);
   }
   .srt span.is-empty {

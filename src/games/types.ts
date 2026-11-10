@@ -23,7 +23,7 @@ export interface GameMeta {
   name: string;
   tagline: string;
   /** Prüft, ob Felder (z. B. aus einem Link) plausibel sind. */
-  valid(fields: readonly number[]): boolean;
+  valid(fields: readonly number[], uuid: string): boolean;
   /** < 0: a ist besser · 0: gleich · > 0: b ist besser */
   compare(a: readonly number[], b: readonly number[]): number;
   /** Hauptwert, groß dargestellt (z. B. „243 ms“). */

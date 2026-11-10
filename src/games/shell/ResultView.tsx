@@ -41,22 +41,26 @@ export function ResultView({
         </p>
       )}
 
-      <dl class="res-stats">
-        {stats.map((s) => (
-          <div key={s.key}>
-            <dt>{s.label}</dt>
-            <dd class="font-mono tabular">{s.value}</dd>
-          </div>
-        ))}
-        {challenge && (
-          <div>
-            <dt>
-              {L.vs} {challenge.nick}
-            </dt>
-            <dd class="font-mono tabular text-accent-2">{game.headline(challenge.fields).value}</dd>
-          </div>
-        )}
-      </dl>
+      {(stats.length > 0 || challenge) && (
+        <dl class="res-stats">
+          {stats.map((s) => (
+            <div key={s.key}>
+              <dt>{s.label}</dt>
+              <dd class="font-mono tabular">{s.value}</dd>
+            </div>
+          ))}
+          {challenge && (
+            <div>
+              <dt>
+                {L.vs} {challenge.nick}
+              </dt>
+              <dd class="font-mono tabular text-accent-2">
+                {game.headline(challenge.fields).value}
+              </dd>
+            </div>
+          )}
+        </dl>
+      )}
 
       {mine && (
         <div class="res-rounds">

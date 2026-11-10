@@ -11,7 +11,7 @@ export function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const p = t.games[slug as 'reaction'];
+const p = t.games[slug as 'reaction' | 'memory' | 'sort' | 'sequence' | 'hexcolor'];
 ---
 
 <BaseLayout title={p.title} description={p.description} ogImage="/og/games.png">

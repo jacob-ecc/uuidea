@@ -32,7 +32,7 @@ export function initialState(
   const r = decodeResult(uuid, code);
   if (!r.ok) return { uuid, fromLink: true, challenge: null, error: 'broken' };
   if (r.value.gameId !== game.id) return { uuid, fromLink: true, challenge: null, error: 'game' };
-  if (!game.valid(r.value.fields))
+  if (!game.valid(r.value.fields, uuid))
     return { uuid, fromLink: true, challenge: null, error: 'broken' };
   return {
     uuid,

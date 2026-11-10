@@ -230,7 +230,7 @@ export const de = {
       collageLabel:
         'Der Reaktionstest: das Reaktionsfeld im dritten Durchgang, das Ergebnis im Vergleich mit einem Herausforderer und der Link mit QR-Code',
       listTitle: 'Fünf Spiele.',
-      listMuted: 'Reaktion läuft, vier folgen.',
+      listMuted: 'Alle laufen im Browser.',
       listLead:
         'Alle fünf lesen ihre Runde aus derselben Quelle: einer UUID, die du wählst oder würfelst.',
       seedTitle: 'So wird aus einer UUID eine Runde',
@@ -262,7 +262,7 @@ export const de = {
       memory: { name: 'Memory', tagline: 'Acht Paare, gemischt von deiner UUID.' },
       sort: {
         name: 'Sortieren',
-        tagline: 'Bring die 16 Kacheln in Reihe – in möglichst wenigen Zügen.',
+        tagline: 'Acht Kacheln, eine Lücke. Bring sie in Reihe.',
       },
       sequence: {
         name: 'Sequenz',
@@ -290,7 +290,7 @@ export const de = {
       bestHere: 'Deine Bestleistung mit dieser UUID',
       challengeFrom: 'Herausforderung von',
       challengeLead: (nick: string, score: string) =>
-        `${nick} hat diese Runde mit ${score} geschafft. Gleiche UUID, gleiche Aufgabe – kannst du das schlagen?`,
+        `${nick} hat diese Runde geschafft: ${score}. Gleiche UUID, gleiche Aufgabe – kannst du das schlagen?`,
       challengeBroken:
         'Dieser Ergebnis-Link ist beschädigt oder gehört zu einer anderen UUID. Du kannst die Runde trotzdem spielen.',
       challengeOtherGame: 'Dieser Ergebnis-Link gehört zu einem anderen Spiel.',
@@ -366,6 +366,125 @@ export const de = {
       faster: (nick: string, ms: string) => `Du warst ${ms} schneller als ${nick}.`,
       slower: (nick: string, ms: string) => `${nick} war ${ms} schneller.`,
       tie: (nick: string) => `Gleichstand mit ${nick} – auf die Millisekunde.`,
+    },
+    memory: {
+      eyebrow: 'Spiel 02 · Memory',
+      title: 'Memory aus einer UUID | uuidea',
+      description:
+        'Acht Paare aus Hex-Ziffern, gemischt von einer UUID. Finde alle Paare in möglichst wenigen Zügen und fordere andere mit derselben Kartenlage heraus.',
+      h1: 'Memory',
+      lead: 'Acht Paare aus Hex-Ziffern. Welche Ziffern im Spiel sind und wo sie liegen, bestimmt die UUID.',
+      rules: [
+        'Deck zwei Karten auf. Gleiche Ziffer: Das Paar bleibt offen.',
+        'Zwei Karten aufdecken zählt als ein Zug.',
+        'Gewertet werden die Züge, bei Gleichstand die Zeit.',
+        'Die Uhr startet mit der ersten Karte.',
+      ],
+      board: 'Spielfeld, 16 Karten',
+      solved: 'Bis alle acht Paare offen lagen',
+      hidden: (n: number) => `Karte ${n}, verdeckt`,
+      shown: (n: number, v: string) => `Karte ${n}: ${v}`,
+      matched: (n: number, v: string) => `Karte ${n}: ${v}, gefunden`,
+      moves: 'Züge',
+      time: 'Zeit',
+      pairs: 'Paare',
+      digits: 'Ziffern im Spiel',
+      layout: 'Lage (Zeile für Zeile)',
+      fewer: (nick: string, n: number) =>
+        `Du hast ${n} ${n === 1 ? 'Zug' : 'Züge'} weniger gebraucht als ${nick}.`,
+      more: (nick: string, n: number) =>
+        `${nick} hat ${n} ${n === 1 ? 'Zug' : 'Züge'} weniger gebraucht.`,
+      faster: (nick: string, s: string) =>
+        `Gleich viele Züge – du warst ${s} schneller als ${nick}.`,
+      slower: (nick: string, s: string) => `Gleich viele Züge – ${nick} war ${s} schneller.`,
+      tie: (nick: string) => `Gleichstand mit ${nick}: gleiche Züge, gleiche Zeit.`,
+    },
+    sort: {
+      eyebrow: 'Spiel 03 · Sortieren',
+      title: 'Schiebepuzzle aus einer UUID | uuidea',
+      description:
+        'Ein 3×3-Schiebepuzzle, gemischt von einer UUID. Bring die Kacheln in Reihe und vergleiche dich mit der kürzesten Lösung.',
+      h1: 'Sortieren',
+      lead: 'Acht Kacheln, eine Lücke. Die UUID mischt das Feld, garantiert lösbar. Wie nah kommst du an die kürzeste Lösung?',
+      rules: [
+        'Tipp eine Kachel neben der Lücke an, um sie zu verschieben.',
+        'Pfeiltasten schieben die passende Kachel in die Lücke.',
+        'Ziel: 1 bis 8 in Reihe, die Lücke unten rechts.',
+        'Gewertet werden die Züge, bei Gleichstand die Zeit.',
+      ],
+      board: 'Schiebepuzzle, 3 mal 3',
+      solved: 'Bis das Feld sortiert war',
+      tile: (n: number, r: number, c: number) => `Kachel ${n}, Zeile ${r}, Spalte ${c}`,
+      moves: 'Züge',
+      time: 'Zeit',
+      optimal: 'Kürzeste Lösung',
+      start: 'Startfeld',
+      perfect: 'Kürzeste Lösung gefunden',
+      fewer: (nick: string, n: number) =>
+        `Du hast ${n} ${n === 1 ? 'Zug' : 'Züge'} weniger gebraucht als ${nick}.`,
+      more: (nick: string, n: number) =>
+        `${nick} hat ${n} ${n === 1 ? 'Zug' : 'Züge'} weniger gebraucht.`,
+      faster: (nick: string, s: string) =>
+        `Gleich viele Züge – du warst ${s} schneller als ${nick}.`,
+      slower: (nick: string, s: string) => `Gleich viele Züge – ${nick} war ${s} schneller.`,
+      tie: (nick: string) => `Gleichstand mit ${nick}: gleiche Züge, gleiche Zeit.`,
+    },
+    sequence: {
+      eyebrow: 'Spiel 04 · Sequenz',
+      title: 'Merkspiel aus einer UUID | uuidea',
+      description:
+        'Merk dir eine Folge aus vier Farben, die mit jeder Stufe länger wird. Die ganze Folge steckt in einer UUID – wer denselben Link öffnet, bekommt dieselbe.',
+      h1: 'Sequenz',
+      lead: 'Vier Felder leuchten nacheinander auf. Tipp die Folge nach. Jede Stufe hängt ein Feld an, bis Stufe 20.',
+      rules: [
+        'Schau zu, dann tipp die Felder in derselben Reihenfolge.',
+        'Tasten 1 bis 4 funktionieren auch.',
+        'Mit jeder Stufe kommt ein Feld dazu und das Tempo zieht an.',
+        'Ein Fehler beendet die Runde. Gewertet wird die letzte geschaffte Stufe.',
+      ],
+      board: 'Vier Felder',
+      pad: (n: number) => `Feld ${n}`,
+      level: 'Stufe',
+      watch: 'Schau zu …',
+      yourTurn: 'Du bist dran',
+      wrong: 'Daneben',
+      done: 'Alle 20 Stufen geschafft',
+      reached: 'Geschaffte Stufen',
+      steps: 'Folge (erste 20)',
+      levelValue: (n: number) => `Stufe ${n}`,
+      better: (nick: string, n: number) =>
+        `Du bist ${n} ${n === 1 ? 'Stufe' : 'Stufen'} weiter gekommen als ${nick}.`,
+      worse: (nick: string, n: number) =>
+        `${nick} ist ${n} ${n === 1 ? 'Stufe' : 'Stufen'} weiter gekommen.`,
+      tie: (nick: string) => `Gleichstand mit ${nick}: dieselbe Stufe.`,
+    },
+    hexcolor: {
+      eyebrow: 'Spiel 05 · Hex-Farben',
+      title: 'Hex-Farben raten aus einer UUID | uuidea',
+      description:
+        'Zehn Farben, je vier Hex-Codes zur Wahl. Farben und Antworten stammen aus einer UUID – teil den Link und vergleicht euer Farbgefühl.',
+      h1: 'Hex-Farben',
+      lead: 'Zehn Farben, je vier Hex-Codes. Welcher gehört dazu? Die Abstände werden mit jeder Farbe kleiner.',
+      rules: [
+        'Wähl den Hex-Code, der zur Farbe im Feld passt.',
+        'Tasten 1 bis 4 funktionieren auch.',
+        'Zehn Farben. Gewertet werden die Treffer, bei Gleichstand die Zeit.',
+        'Gezählt wird nur deine Bedenkzeit, nicht die Anzeige danach.',
+      ],
+      swatch: (n: number, of: number) => `Farbe ${n} von ${of}`,
+      options: 'Hex-Codes zur Auswahl',
+      right: 'Richtig',
+      wrongWas: (hex: string) => `Daneben – richtig war ${hex}`,
+      hits: 'Treffer',
+      time: 'Zeit',
+      hitsValue: (n: number, of: number) => `${n} von ${of}`,
+      colors: 'Gesuchte Farben',
+      more: (nick: string, n: number) => `Du hattest ${n} Treffer mehr als ${nick}.`,
+      fewer: (nick: string, n: number) => `${nick} hatte ${n} Treffer mehr.`,
+      faster: (nick: string, s: string) =>
+        `Gleich viele Treffer – du warst ${s} schneller als ${nick}.`,
+      slower: (nick: string, s: string) => `Gleich viele Treffer – ${nick} war ${s} schneller.`,
+      tie: (nick: string) => `Gleichstand mit ${nick}: gleiche Treffer, gleiche Zeit.`,
     },
   },
   footer: {

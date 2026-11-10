@@ -15,8 +15,9 @@ async function open(page: Page, url: string) {
 async function play(page: Page, uuid: string) {
   const { waits } = makePlan(uuid);
   await page.getByRole('button', { name: 'Runde starten' }).click();
-  await page.clock.runFor(50); // Preact-Effekte (Fokus) laufen über rAF/Timer
   const pad = page.locator('.rx-pad');
+  await expect(pad).toBeVisible(); // Spiel-Modul ist geladen
+  await page.clock.runFor(50); // Preact-Effekte (Fokus) laufen über rAF/Timer
   await expect(pad).toBeFocused();
   for (let i = 0; i < ROUNDS; i++) {
     await page.keyboard.press('Space');
@@ -86,9 +87,12 @@ test('vertauschte UUID macht den Ergebnis-Link ungültig', async ({ page }) => {
 test('Frühstart wird bestraft und die Runde läuft weiter', async ({ page }) => {
   await open(page, `/games/reaction?id=${U}`);
   await page.getByRole('button', { name: 'Runde starten' }).click();
-  await page.clock.runFor(50); // Preact-Effekte (Fokus) laufen über rAF/Timer
   const pad = page.locator('.rx-pad');
+  await expect(pad).toBeVisible();
+  await page.clock.runFor(50); // Preact-Effekte (Fokus) laufen über rAF/Timer
+  await expect(pad).toBeFocused();
   await page.keyboard.press('Space');
+  await expect(pad).toHaveAttribute('data-phase', 'wait');
   await page.clock.runFor(500);
   await page.keyboard.press('Space');
   await expect(pad).toHaveAttribute('data-phase', 'foul');
@@ -98,6 +102,7 @@ test('Frühstart wird bestraft und die Runde läuft weiter', async ({ page }) =>
 test('Neue UUID ändert Adresse und Runde', async ({ page }) => {
   await open(page, `/games/reaction?id=${U}`);
   await page.getByRole('button', { name: 'Neue UUID' }).click();
+  await page.clock.runFor(50); // Adresse wird per Effekt aktualisiert
   await expect(page).not.toHaveURL(new RegExp(U));
   await expect(page).toHaveURL(/\?id=[0-9a-f-]{36}$/);
 });
